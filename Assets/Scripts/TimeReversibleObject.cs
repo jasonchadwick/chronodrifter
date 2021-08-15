@@ -23,12 +23,15 @@ public class TimeReversibleObject : MonoBehaviour {
         objectTimeHistory = new Stack<ObjectSnap2D>();
         isReversed = false;
         isPaused = false;
+
+        TimeEventManager.OnPause += UpdateOnPause;
+        TimeEventManager.OnReverse += UpdateOnReverse;
     }
 
     // fixedupdate bc we want this to be framerate independent
     void FixedUpdate() {
-        if (isPaused) return;
-        if (isReversed) {
+        if (TimeEventManager.isPaused) return;
+        if (TimeEventManager.isReversed) {
             ObjectSnap2D curSnap;
             // move backwards in time list
             if (objectTimeHistory.Count > 1) {
@@ -36,8 +39,6 @@ public class TimeReversibleObject : MonoBehaviour {
             }
             else if (objectTimeHistory.Count == 1) {
                 curSnap = objectTimeHistory.Peek();
-                isReversed = false;
-                Pause();
             }
             else {return;}
 
@@ -54,22 +55,47 @@ public class TimeReversibleObject : MonoBehaviour {
         }
     }
 
-     void Update() {
-        if (Input.GetKeyDown(KeyCode.R)) {
-            Debug.Log("R");
-            isReversed = !isReversed;
-            if (isRigidbody) {
-                rb2D.velocity *= -1;
-                rb2D.angularVelocity *= -1;
-            }
+    void UpdateOnPause() {
+        if (isRigidbody && !isKinematic) {
+            rb2D.isKinematic = !rb2D.isKinematic;
         }
-        if (Input.GetKeyDown(KeyCode.P)) {
-            Debug.Log("P");
-            Pause();
+        if (TimeEventManager.isPaused) {
+            pausedVelocity = rb2D.velocity;
+            pausedAngularVelocity = rb2D.angularVelocity;
+            rb2D.velocity = new Vector2(0, 0);
+            rb2D.angularVelocity = 0.0f;
+        }
+        else {
+            rb2D.velocity = pausedVelocity;
+            rb2D.angularVelocity = pausedAngularVelocity;
         }
     }
 
-    void Pause() {
+    void UpdateOnReverse() {
+        if (isRigidbody) {
+            rb2D.velocity *= -1;
+            rb2D.angularVelocity *= -1;
+        }
+    }
+
+     void Update() {
+        if (Input.GetKeyDown(KeyCode.R)) {
+            Debug.Log("R_");
+            //isReversed = !isReversed;
+            //if (isRigidbody) {
+            //    rb2D.velocity *= -1;
+            //    rb2D.angularVelocity *= -1;
+            //}
+        }
+        if (Input.GetKeyDown(KeyCode.P)) {
+            Debug.Log("P_");
+            //Pause();
+        }
+    }
+
+/*    void Pause() {
+        Debug.Log(Time.timeScale);
+        Time.timeScale = 1 - Time.timeScale;
         if (isRigidbody && !isKinematic) {
             rb2D.isKinematic = !rb2D.isKinematic;
         }
@@ -84,7 +110,7 @@ public class TimeReversibleObject : MonoBehaviour {
             rb2D.angularVelocity = pausedAngularVelocity;
         }
         isPaused = !isPaused;
-    }
+    }*/
 }
 
 // general object that can be time reversed
