@@ -8,7 +8,6 @@ class CameraFollowPlayer : MonoBehaviour {
 
     void Start() {
         cam = Camera.main;
-        cam.orthographicSize = 10;
     }
 
     void Update() {

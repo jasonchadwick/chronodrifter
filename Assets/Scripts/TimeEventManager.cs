@@ -17,7 +17,7 @@ class TimeEventManager : MonoBehaviour {
                 OnReverse();
             }
         }
-        if (Input.GetKeyDown(KeyCode.P)) {
+        if (Input.GetKeyDown(KeyCode.Space)) {
             Debug.Log("P");
             isPaused = !isPaused;
             if (OnPause != null) {
