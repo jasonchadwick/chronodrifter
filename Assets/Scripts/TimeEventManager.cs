@@ -9,16 +9,21 @@ class TimeEventManager : MonoBehaviour {
     public static bool isPaused;
     public static bool isReversed;
 
+    public static void Reset() {
+        OnPause = null;
+        OnReverse = null;
+        isPaused = false;
+        isReversed = false;
+    }
+
     void Update() {
         if (Input.GetKeyDown(KeyCode.R)) {
-            Debug.Log("R");
             isReversed = !isReversed;
             if (OnReverse != null) {
                 OnReverse();
             }
         }
         if (Input.GetKeyDown(KeyCode.Space)) {
-            Debug.Log("P");
             isPaused = !isPaused;
             if (OnPause != null) {
                 OnPause();

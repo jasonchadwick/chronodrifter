@@ -77,40 +77,6 @@ public class TimeReversibleObject : MonoBehaviour {
             rb2D.angularVelocity *= -1;
         }
     }
-
-     void Update() {
-        if (Input.GetKeyDown(KeyCode.R)) {
-            Debug.Log("R_");
-            //isReversed = !isReversed;
-            //if (isRigidbody) {
-            //    rb2D.velocity *= -1;
-            //    rb2D.angularVelocity *= -1;
-            //}
-        }
-        if (Input.GetKeyDown(KeyCode.P)) {
-            Debug.Log("P_");
-            //Pause();
-        }
-    }
-
-/*    void Pause() {
-        Debug.Log(Time.timeScale);
-        Time.timeScale = 1 - Time.timeScale;
-        if (isRigidbody && !isKinematic) {
-            rb2D.isKinematic = !rb2D.isKinematic;
-        }
-        if (isPaused) {
-            pausedVelocity = rb2D.velocity;
-            pausedAngularVelocity = rb2D.angularVelocity;
-            rb2D.velocity = new Vector2(0, 0);
-            rb2D.angularVelocity = 0.0f;
-        }
-        else {
-            rb2D.velocity = pausedVelocity;
-            rb2D.angularVelocity = pausedAngularVelocity;
-        }
-        isPaused = !isPaused;
-    }*/
 }
 
 // general object that can be time reversed
