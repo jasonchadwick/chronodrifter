@@ -9,6 +9,8 @@ class TimeEventManager : MonoBehaviour {
     public static bool isPaused;
     public static bool isReversed;
 
+    // should not be needed. Time reversible objects should remove
+    // their functions from the event managers in OnDisable or OnDestroy.
     public static void Reset() {
         OnPause = null;
         OnReverse = null;
@@ -23,7 +25,7 @@ class TimeEventManager : MonoBehaviour {
                 OnReverse();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.F)) {
             isPaused = !isPaused;
             if (OnPause != null) {
                 OnPause();

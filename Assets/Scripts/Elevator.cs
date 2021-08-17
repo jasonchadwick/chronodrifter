@@ -72,6 +72,11 @@ class Elevator : MonoBehaviour {
     void Reverse() {
         velocity = -velocity;
     }
+
+    void OnDisable() {
+        TimeEventManager.OnPause -= Pause;
+        TimeEventManager.OnReverse -= Reverse;
+    }
 }
 
 // for child:

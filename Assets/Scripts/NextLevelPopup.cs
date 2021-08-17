@@ -14,17 +14,14 @@ class NextLevelPopup : MonoBehaviour {
             nextLevelButton.onClick.AddListener(LoadNextLevel);
         }
         mainMenuButton.onClick.AddListener(LoadMainMenu);
-        Debug.Log("start");
     }
 
     void LoadNextLevel() {
-        Debug.Log("nextlevel");
         TimeEventManager.Reset();
         SceneManager.LoadScene(sceneidx + 1);
     }
 
     void LoadMainMenu() {
-        Debug.Log("nextlevel");
         TimeEventManager.Reset();
         SceneManager.LoadScene("MainMenu");
     }

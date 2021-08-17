@@ -13,11 +13,12 @@ class ExitPortal : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.layer == 3) {
+            Destroy(other.gameObject);
             if (sceneidx == SceneManager.sceneCountInBuildSettings - 1) {
-                Instantiate(gameEndPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                Instantiate(gameEndPrefab, Vector3.zero, Quaternion.identity);
                 // say "game complete, return to main menu"
             } else {
-                Instantiate(nextLevelPrefab, new Vector3(0, 0, 0), Quaternion.identity);
+                Instantiate(nextLevelPrefab, Vector3.zero, Quaternion.identity);
                 // say "return to main menu / next level"
             }
         }

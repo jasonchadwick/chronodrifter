@@ -146,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8aa4dbcaf9157d375bfdc79f9685b20f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  restoringLerp: 15
 --- !u!114 &6472181411170540357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +172,7 @@ MonoBehaviour:
   - {x: -0.2437867, y: 0.24889612, z: 0}
   m_ShapePathHash: 1101714981
   m_Mesh: {fileID: 0}
-  m_InstanceId: 83496
+  m_InstanceId: 37150
 --- !u!1 &2869722296901259985
 GameObject:
   m_ObjectHideFlags: 0
@@ -222,7 +223,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 0.5
   m_LightVolumeOpacity: 0
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 0000000079d03d90
   m_LightCookieSprite: {fileID: 0}
   m_UseNormalMap: 0
   m_LightOrder: 0

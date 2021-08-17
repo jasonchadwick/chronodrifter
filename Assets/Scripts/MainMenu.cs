@@ -6,10 +6,12 @@ using UnityEngine.SceneManagement;
 class MainMenu : MonoBehaviour {
     public Button newGame;
     public Button levels;
+    public Button quit;
 
     void Start() {
         newGame.onClick.AddListener(StartNewGame);
         levels.onClick.AddListener(LoadLevelScreen);
+        quit.onClick.AddListener(QuitGame);
     }
 
     void StartNewGame() {
@@ -17,6 +19,10 @@ class MainMenu : MonoBehaviour {
     }
 
     void LoadLevelScreen() {
-        SceneManager.LoadScene("Levels");
+        SceneManager.LoadScene("LevelSelector");
+    }
+
+    void QuitGame() {
+        Application.Quit();
     }
 }
