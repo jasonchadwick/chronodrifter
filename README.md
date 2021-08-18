@@ -14,3 +14,7 @@ Platform puzzler where the direction of time flow can change.
   - could press buttons to let actual player through a door or something
     - could probably do some very interesting puzzles using this
 - more polished art
+
+### note
+
+Must `apt install libncurses5`

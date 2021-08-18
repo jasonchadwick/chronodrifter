@@ -16,12 +16,12 @@ class TimeGhost : MonoBehaviour {
 
     void FixedUpdate() {
         if (!TimeEventManager.isPaused) {
-            if (TimeEventManager.isReversed && positionHistory.Count > 0) {
-                if (positionHistory.Count > 1) {
+            if (TimeEventManager.isReversed) {
+                if (positionHistory.Count > 0) {
                     ghost.transform.position = positionHistory.Pop();
                 }
                 else {
-                    ghost.transform.position = positionHistory.Peek();
+                    Destroy(ghost);
                 }
             }
             else {
