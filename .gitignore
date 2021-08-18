@@ -5,8 +5,8 @@
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
+#/[Bb]uild/
+#/[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 
@@ -59,5 +59,4 @@ sysinfo.txt
 crashlytics-build.properties
 
 # ignore build
-*.x36_64
-chronodrifter_Data/
+Linux/
