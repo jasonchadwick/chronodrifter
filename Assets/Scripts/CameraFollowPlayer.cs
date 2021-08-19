@@ -17,9 +17,9 @@ class CameraFollowPlayer : MonoBehaviour {
 
     void Update() {
         if (target == null) {
-            zoomedOut = true;
+            return;
         }
-        else if (Input.GetKeyDown(KeyCode.Space)) {
+        if (Input.GetKeyDown(KeyCode.Space)) {
             zoomedOut = !zoomedOut;
         }
 

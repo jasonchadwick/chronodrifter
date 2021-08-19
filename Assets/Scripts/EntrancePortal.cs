@@ -5,7 +5,7 @@ class EntrancePortal : MonoBehaviour {
     public GameObject playerPrefab;
     private GameObject player;
 
-    void Start() {
+    public void Spawn() {
         player = Instantiate(playerPrefab, transform.position + Vector3.down, Quaternion.identity);
         Camera.main.GetComponent<CameraFollowPlayer>().target = player.transform;
     }

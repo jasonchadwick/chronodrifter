@@ -15,7 +15,7 @@ class GamePausedPopup : MonoBehaviour {
     }
 
     void Resume() {
-        pauseManager.GetComponent<PauseManager>().Pause();
+        pauseManager.GetComponent<SceneActions>().Pause();
     }
 
     void LoadMainMenu() {

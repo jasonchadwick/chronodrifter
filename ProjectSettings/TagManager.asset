@@ -49,3 +49,6 @@ TagManager:
   - name: Walls
     uniqueID: 2419970169
     locked: 0
+  - name: CoverScreen
+    uniqueID: 1195365569
+    locked: 0

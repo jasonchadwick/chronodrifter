@@ -16,6 +16,7 @@ class TimeEventManager : MonoBehaviour {
         OnReverse = null;
         isPaused = false;
         isReversed = false;
+        Time.timeScale = 1.0f;
     }
 
     void Update() {

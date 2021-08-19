@@ -4,8 +4,11 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 class SquareDropper : MonoBehaviour {
     public GameObject squarePrefab;
+    public float initVelocity;
     public float spawnInterval = 5.0f;
     public float fadeTime = 1.0f;
+    private float cumulativeAccelTime = 0.0f;
+    public float accelTime = 0.5f;
     private GameObject square;
     private float nextSpawnTime;
     private SpriteRenderer squareRenderer;
@@ -16,53 +19,43 @@ class SquareDropper : MonoBehaviour {
     private float reverseLerp;
     private float lastAchievedIntensity;
     private Color lastAchievedColor;
+    private float squareLifetime;
 
     void Start() {
         nextSpawnTime = 0;
+        squareLifetime = spawnInterval*2;
     }
 
-    void Update() {
-        if (!TimeEventManager.isPaused && !TimeEventManager.isReversed) {
-            if (Time.time >= nextSpawnTime) {
-                Destroy(square);
-                Debug.Log(square);
-                Debug.Log(Time.time);
-                square = Instantiate(squarePrefab, transform.position, Quaternion.identity);
-                nextSpawnTime = Time.time + spawnInterval;
-                
-                squareRenderer = square.GetComponent<SpriteRenderer>();
-                oldColor = squareRenderer.color;
-                goalColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
-                squareLight = square.GetComponentInChildren<Light2D>();
-                oldIntensity = squareLight.intensity;
+    void FixedUpdate() {
+        if (!TimeEventManager.isPaused) {
+            if (TimeEventManager.isReversed) {
+                if (!square.GetComponent<TimeReversibleObject>().isFullyReversed) {
+                    squareLifetime -= Time.deltaTime;
+                }
             }
-            else if (Time.time >= nextSpawnTime - fadeTime && square != null) {
-                float lerp = 1 - ((nextSpawnTime - Time.time) / fadeTime);
+            else if (!TimeEventManager.isReversed) {
+                if (squareLifetime >= spawnInterval) {
+                    Destroy(square);
+                    square = Instantiate(squarePrefab, transform.position, transform.rotation);
+                    squareLifetime = 0;
+                    cumulativeAccelTime = 0;
+                    
+                    square.GetComponent<TimeReversibleObject>().restoringForce = false;
+                    squareRenderer = square.GetComponent<SpriteRenderer>();
+                    oldColor = squareRenderer.color;
+                    goalColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+                    squareLight = square.GetComponentInChildren<Light2D>();
+                    oldIntensity = squareLight.intensity;
+                }
+                else if (squareLifetime < accelTime) {
+                    square.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(0, -initVelocity));
+                }
+                squareLifetime += Time.fixedDeltaTime;
+            }
+            if (squareLifetime >= spawnInterval - fadeTime) {
+                float lerp = 1 - (spawnInterval - squareLifetime) / fadeTime;
                 squareRenderer.color = Color.Lerp(oldColor, goalColor, lerp);
-                lastAchievedColor = squareRenderer.color;
                 squareLight.intensity = Mathf.Lerp(oldIntensity, 0, lerp);
-                lastAchievedIntensity = squareLight.intensity;
-            }
-        }
-        else if (TimeEventManager.isPaused) {
-            nextSpawnTime += Time.deltaTime;
-        }
-        else if (TimeEventManager.isReversed) {
-            if (squareRenderer.color.a <= 0.99) {
-                reverseLerp += Time.deltaTime / fadeTime;
-                squareRenderer.color = Color.Lerp(lastAchievedColor, oldColor, reverseLerp);
-                squareLight.intensity = Mathf.Lerp(lastAchievedIntensity, oldIntensity, reverseLerp);
-            }
-            else {
-                reverseLerp = 0;
-            }
-            if ((transform.position - square.transform.position).magnitude > 0.01) {
-                // account for time flying up plus time to fall back down
-                nextSpawnTime += 2*Time.deltaTime;
-            }
-            else {
-                // just account for time sitting at spawn
-                nextSpawnTime += Time.deltaTime;
             }
         }
     }
