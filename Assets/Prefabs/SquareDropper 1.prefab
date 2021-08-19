@@ -115,7 +115,7 @@ MonoBehaviour:
   - {x: -1.6, y: 1.6, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 49306
+  m_InstanceId: 82468
 --- !u!114 &1306551338907400572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,6 +132,7 @@ MonoBehaviour:
   initVelocity: 0
   spawnInterval: 5
   fadeTime: 1
+  accelTime: 0.5
 --- !u!61 &7759506397536811149
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -145,18 +146,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.4232571, y: 0}
+  m_Offset: {x: -1.55, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.2, y: 3.2}
+    oldSize: {x: 4, y: 4}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.35348618, y: 3.2}
+  m_Size: {x: 0.9, y: 4}
   m_EdgeRadius: 0
 --- !u!61 &6335488500877870547
 BoxCollider2D:
@@ -171,18 +172,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1.4314911, y: 0}
+  m_Offset: {x: 1.55, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.2, y: 3.2}
+    oldSize: {x: 4, y: 4}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.337018, y: 3.2}
+  m_Size: {x: 0.9, y: 4}
   m_EdgeRadius: 0
 --- !u!61 &5762507952809927115
 BoxCollider2D:
@@ -197,18 +198,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.4225097}
+  m_Offset: {x: 0, y: 1.55}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3.2, y: 3.2}
+    oldSize: {x: 4, y: 4}
     newSize: {x: 0.32, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.2, y: 0.35498047}
+  m_Size: {x: 4, y: 0.9}
   m_EdgeRadius: 0
 --- !u!50 &4972826656869478433
 Rigidbody2D:

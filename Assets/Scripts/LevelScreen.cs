@@ -41,7 +41,8 @@ class LevelScreen : MonoBehaviour {
                     GameObject b = Instantiate(buttonPrefab, new Vector3((leftX+rightX)/2, (topY+botY)/2, 0), Quaternion.identity);
                     b.transform.SetParent(canvas.transform, false);
                     b.GetComponent<RectTransform>().sizeDelta = new Vector2(tileWidth-2*xbuf, tileHeight-2*xbuf);
-                    b.GetComponentInChildren<Text>().text = Utils.formLevelName(levelidx, 2);
+                    b.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(tileWidth-4*xbuf, tileHeight-3*xbuf);
+                    b.GetComponentInChildren<Text>().text = Utils.formLevelName(levelidx, 1);
                     b.GetComponent<Button>().onClick.AddListener(() => LoadLevel(levelidx));
                 }
             }

@@ -7,10 +7,8 @@ class SquareDropper : MonoBehaviour {
     public float initVelocity;
     public float spawnInterval = 5.0f;
     public float fadeTime = 1.0f;
-    private float cumulativeAccelTime = 0.0f;
     public float accelTime = 0.5f;
     private GameObject square;
-    private float nextSpawnTime;
     private SpriteRenderer squareRenderer;
     private Color oldColor;
     private Color goalColor;
@@ -22,7 +20,6 @@ class SquareDropper : MonoBehaviour {
     private float squareLifetime;
 
     void Start() {
-        nextSpawnTime = 0;
         squareLifetime = spawnInterval*2;
     }
 
@@ -38,9 +35,8 @@ class SquareDropper : MonoBehaviour {
                     Destroy(square);
                     square = Instantiate(squarePrefab, transform.position, transform.rotation);
                     squareLifetime = 0;
-                    cumulativeAccelTime = 0;
                     
-                    square.GetComponent<TimeReversibleObject>().restoringForce = false;
+                    square.GetComponent<TimeReversibleObject>().restoringForce = true;
                     squareRenderer = square.GetComponent<SpriteRenderer>();
                     oldColor = squareRenderer.color;
                     goalColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0);

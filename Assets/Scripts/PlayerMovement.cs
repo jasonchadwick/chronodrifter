@@ -7,6 +7,8 @@ class PlayerMovement : MonoBehaviour {
     public float maxHorizontalVelocity = 5.0f;
     public float selfRightingLerp = 1.0f;
     Rigidbody2D rb2D;
+    private bool isOnGround;
+
     void Start() {
         rb2D = GetComponent<Rigidbody2D>();
         Physics2D.queriesHitTriggers = false;
@@ -15,7 +17,7 @@ class PlayerMovement : MonoBehaviour {
     void Update() {
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, Vector3.Dot(transform.up, Vector3.up)), selfRightingLerp*Time.deltaTime);
 
-        if (Input.GetKey(KeyCode.W) && IsOnGround() && rb2D.velocity.y < jumpStrength/5) {
+        if (Input.GetKey(KeyCode.W) && isOnGround && rb2D.velocity.y < jumpStrength/5) {
             rb2D.velocity = new Vector2(rb2D.velocity.x, jumpStrength);
         }
         if (Input.GetKey(KeyCode.A) && rb2D.velocity.x > -maxHorizontalVelocity) {
@@ -29,16 +31,15 @@ class PlayerMovement : MonoBehaviour {
         }
     }
 
-    // ray cast to see if it's touching something that can jump from (any rigidbody2D)
-    private bool IsOnGround() {
-        int selfLayerMask = ~(1 << 3);
-        
-        bool onGroundLeftLeft = Physics2D.Raycast(new Vector2(transform.position.x-0.74f, transform.position.y-0.75f), Vector2.down, 0.1f, selfLayerMask);
-        bool onGroundLeft = Physics2D.Raycast(new Vector2(transform.position.x-0.375f, transform.position.y-0.75f), Vector2.down, 0.1f, selfLayerMask);
-        bool onGroundCenter = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y-0.75f), Vector2.down, 0.1f, selfLayerMask);
-        bool onGroundRight = Physics2D.Raycast(new Vector2(transform.position.x+0.375f, transform.position.y-0.75f), Vector2.down, 0.1f, selfLayerMask);
-        bool onGroundRightRight = Physics2D.Raycast(new Vector2(transform.position.x+0.74f, transform.position.y-0.75f), Vector2.down, 0.1f, selfLayerMask);
+    void OnTriggerEnter2D(Collider2D other) {
+        isOnGround = true;
+    }
 
-        return onGroundLeftLeft || onGroundLeft || onGroundCenter || onGroundRight || onGroundRightRight;
+    void OnTriggerStay2D(Collider2D other) {
+        isOnGround = true;
+    }
+
+    void OnTriggerExit2D(Collider2D other) {
+        isOnGround = false;
     }
 }

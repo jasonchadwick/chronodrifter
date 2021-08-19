@@ -8,6 +8,7 @@ public class TimeReversibleObject : MonoBehaviour {
     private bool isKinematic;
     private Vector2 pausedVelocity;
     private float pausedAngularVelocity;
+    private bool pausedReverse;
     public bool restoringForce = true;
     public float restoringLerp = 10.0f;
     public float similarityThreshold = 5e-2f;
@@ -89,14 +90,22 @@ public class TimeReversibleObject : MonoBehaviour {
             rb2D.isKinematic = !rb2D.isKinematic;
         }
         if (TimeEventManager.isPaused) {
+            // store velocity values
+            pausedReverse = TimeEventManager.isReversed;
             pausedVelocity = rb2D.velocity;
             pausedAngularVelocity = rb2D.angularVelocity;
             rb2D.velocity = new Vector2(0, 0);
             rb2D.angularVelocity = 0.0f;
         }
         else {
+            // restore velocity values
             rb2D.velocity = pausedVelocity;
             rb2D.angularVelocity = pausedAngularVelocity;
+            if (pausedReverse ^ TimeEventManager.isReversed) {
+                // if reverse mode has changed, invert velocity
+                rb2D.velocity *= -1;
+                rb2D.angularVelocity *= -1;
+            }
         }
     }
 

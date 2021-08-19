@@ -31,7 +31,7 @@ class TimeGhost : MonoBehaviour {
     }
 
     void OnPause() {
-        if (TimeEventManager.isPaused) {
+        if (TimeEventManager.isPaused && !TimeEventManager.isReversed) {
             ghost = Instantiate(ghostPrefab, transform.position, transform.rotation);
         }
         else {
@@ -40,12 +40,14 @@ class TimeGhost : MonoBehaviour {
     }
 
     void OnReverse() {
-        if (TimeEventManager.isReversed) {
+        if (TimeEventManager.isReversed && !TimeEventManager.isPaused) {
             ghost = Instantiate(ghostPrefab, transform.position, transform.rotation);
         }
         else {
-            positionHistory.Clear();
-            Destroy(ghost);
+            if (ghost != null) {
+                positionHistory.Clear();
+                Destroy(ghost);
+            }
         }
     }
 }

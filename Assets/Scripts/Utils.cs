@@ -5,9 +5,10 @@ class Utils {
     public static string[] levelNames = {
             "Your Education Begins",
             "Some Basic Time Travel",
-            "Up and Down",
+            "Up Down Up",
             "Falling Upwards",
-            "Please Pick Up After Yourself"
+            "Please Pick Up After Yourself",
+            "Good Luck"
     };
 
     public static string formLevelName(int idx, int numNewLines, bool addLevelWord = false) {
