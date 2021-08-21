@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-class Elevator : MonoBehaviour {
+class Elevator : ButtonActivatedObject {
     public float velocity = 1.0f;
     public Color frontColor = Color.white;
     public float colorChangeLerp = 1.0f;
@@ -17,7 +17,7 @@ class Elevator : MonoBehaviour {
     }
 
     void Update() {
-        if (!paused) {
+        if (!paused && isActive) {
             foreach (Transform childTransform in transform) {
                 GameObject child = childTransform.gameObject;
                 float childVelocity = velocity;

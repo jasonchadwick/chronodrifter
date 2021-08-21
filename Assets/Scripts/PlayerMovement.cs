@@ -26,9 +26,6 @@ class PlayerMovement : MonoBehaviour {
         else if (Input.GetKey(KeyCode.D) && rb2D.velocity.x < maxHorizontalVelocity) {
             rb2D.AddForce(new Vector2(walkStrength, 0));
         }
-        else {
-
-        }
     }
 
     void OnTriggerEnter2D(Collider2D other) {

@@ -164,7 +164,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'FLOOR 00
+  m_text: 'FLOOR 07
 
 '
   m_isRightToLeft: 0
@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 7259358201453375097}
   - component: {fileID: 7259358201453375096}
   - component: {fileID: 7259358201453375099}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,7 +463,7 @@ MonoBehaviour:
   - {x: -0.5, y: 0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 70240
+  m_InstanceId: 37782
 --- !u!1 &7259358201622784211
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +476,7 @@ GameObject:
   - component: {fileID: 7259358201622784239}
   - component: {fileID: 7259358201622784238}
   - component: {fileID: 7259358201622784209}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -599,7 +599,7 @@ MonoBehaviour:
   - {x: -0.5, y: 0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 70246
+  m_InstanceId: 37788
 --- !u!1 &7259358201783994892
 GameObject:
   m_ObjectHideFlags: 0
@@ -742,7 +742,7 @@ GameObject:
   - component: {fileID: 7259358202034752483}
   - component: {fileID: 7259358202034752482}
   - component: {fileID: 7259358202034752485}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -865,7 +865,7 @@ MonoBehaviour:
   - {x: -0.5, y: 0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 70270
+  m_InstanceId: 37812
 --- !u!1 &7259358202037235263
 GameObject:
   m_ObjectHideFlags: 0
@@ -1082,7 +1082,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7259358202248145521}
   - component: {fileID: 6325769801938873513}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Walls
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1132,7 +1132,7 @@ GameObject:
   - component: {fileID: 7259358202845072486}
   - component: {fileID: 7259358202845072489}
   - component: {fileID: 7259358202845072488}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1255,7 +1255,7 @@ MonoBehaviour:
   - {x: -0.5, y: 0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 70298
+  m_InstanceId: 37840
 --- !u!1 &7259358203081739122
 GameObject:
   m_ObjectHideFlags: 0

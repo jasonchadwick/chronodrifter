@@ -512,7 +512,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c7498c25bb10e53b272b37a3e364c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rows: 2
+  rows: 3
   cols: 3
   buttonPrefab: {fileID: 3298314641980447623, guid: 904471ab5bbcf507f8cafffdf02da54f, type: 3}
   mainMenuButton: {fileID: 841838046}

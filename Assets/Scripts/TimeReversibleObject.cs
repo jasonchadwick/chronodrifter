@@ -67,7 +67,7 @@ public class TimeReversibleObject : MonoBehaviour {
 
             curSnap.numIntervals--;
         }
-        // if time is playing forward, delete existing "future" and make a new one
+        // if time is playing forward, add to state stack
         else {
             // if in the same place as last frame, just add one to numIntervals of last state.
             ObjectSnap2D lastState = null;

@@ -11,7 +11,7 @@ class ExitPortal : MonoBehaviour {
         sceneidx = SceneManager.GetActiveScene().buildIndex;
     }
 
-    private void OnTriggerEnter2D(Collider2D other) {
+    void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.layer == 3) {
             Destroy(other.gameObject);
             if (sceneidx == SceneManager.sceneCountInBuildSettings - 1) {

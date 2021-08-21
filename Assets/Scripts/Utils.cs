@@ -8,7 +8,9 @@ class Utils {
             "Up Down Up",
             "Falling Upwards",
             "Please Pick Up After Yourself",
-            "Good Luck"
+            "Timing",
+            "Cause and Effect",
+            "Good Luck",
     };
 
     public static string formLevelName(int idx, int numNewLines, bool addLevelWord = false) {
@@ -38,5 +40,24 @@ class Utils {
 
     public static Vector2 Vector3to2(Vector3 v) {
         return new Vector2(v.x, v.y);
+    }
+
+    public static Vector3 v3mult(Vector3 a, Vector3 b) {
+        return new Vector3(a.x*b.x, a.y*b.y, a.z*b.z);
+    }
+
+    public static Vector3 v3div(Vector3 a, Vector3 b) {
+        return new Vector3(a.x/b.x, a.y/b.y, a.z/b.z);
+    }
+
+    public static void ScaleFromPoint(Transform transform, Vector3 anchor, Vector3 scale) {
+        Vector3 fractionalScale = v3div((scale - transform.localScale), transform.localScale);
+        if (fractionalScale.magnitude < 0.001f) {
+            return;
+        }
+        Vector3 delta = transform.position - anchor;
+        Vector3 newAnchor = anchor - v3mult(delta,fractionalScale);
+        transform.localScale = scale;
+        transform.position += (anchor - newAnchor);
     }
 }
