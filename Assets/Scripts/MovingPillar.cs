@@ -17,7 +17,6 @@ class MovingPillar : ButtonActivatedObject {
         xScale = transform.localScale.x;
         zScale = transform.localScale.z;
         scaleAnchor = new Vector3(transform.localPosition.x, transform.localPosition.y - baseYScale/2, transform.localPosition.z);
-        Debug.Log(scaleAnchor);
     }
 
     void FixedUpdate() {
@@ -43,14 +42,14 @@ class MovingPillar : ButtonActivatedObject {
                 if (activeTime < moveTime) {
                     activeTime += Time.fixedDeltaTime;
                 }
-                yScale = Mathf.Lerp(baseYScale, activeYScale, activeTime / moveTime);
+                yScale = Mathf.Lerp(baseYScale, activeYScale, Mathf.Pow(activeTime / moveTime, 2));
                 ys.Push(yScale);
             }
             else if (!isActive) {
                 if (activeTime > 0) {
                     activeTime -= Time.fixedDeltaTime;
                 }
-                yScale = Mathf.Lerp(baseYScale, activeYScale, activeTime / moveTime);
+                yScale = Mathf.Lerp(baseYScale, activeYScale, Mathf.Pow(activeTime / moveTime, 2));
                 ys.Push(yScale);
             }
 
@@ -59,5 +58,4 @@ class MovingPillar : ButtonActivatedObject {
             }
         }
     }
-
 }

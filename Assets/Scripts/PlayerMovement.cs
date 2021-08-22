@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class PlayerMovement : MonoBehaviour {
+class PlayerMovement : Character {
     public float jumpStrength = 1.0f;
     public float walkStrength = 1.0f;
     public float maxHorizontalVelocity = 5.0f;

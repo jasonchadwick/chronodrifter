@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-class SquareDropper : MonoBehaviour {
+class SquareDropper : ButtonActivatedObject {
     public GameObject squarePrefab;
     public float initVelocity;
     public float spawnInterval = 5.0f;
@@ -24,7 +24,7 @@ class SquareDropper : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (!TimeEventManager.isPaused) {
+        if (isActive && !TimeEventManager.isPaused) {
             if (TimeEventManager.isReversed) {
                 if (!square.GetComponent<TimeReversibleObject>().isFullyReversed) {
                     squareLifetime -= Time.deltaTime;
@@ -53,6 +53,9 @@ class SquareDropper : MonoBehaviour {
                 squareRenderer.color = Color.Lerp(oldColor, goalColor, lerp);
                 squareLight.intensity = Mathf.Lerp(oldIntensity, 0, lerp);
             }
+        }
+        else if (!isActive && !TimeEventManager.isPaused) {
+            squareLifetime = (squareLifetime + Time.deltaTime) % spawnInterval;
         }
     }
 }

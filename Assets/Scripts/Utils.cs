@@ -55,9 +55,9 @@ class Utils {
         if (fractionalScale.magnitude < 0.001f) {
             return;
         }
-        Vector3 delta = transform.position - anchor;
+        Vector3 delta = transform.localPosition - anchor;
         Vector3 newAnchor = anchor - v3mult(delta,fractionalScale);
         transform.localScale = scale;
-        transform.position += (anchor - newAnchor);
+        transform.localPosition += (anchor - newAnchor);
     }
 }
