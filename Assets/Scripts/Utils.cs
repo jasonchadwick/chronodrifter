@@ -9,8 +9,8 @@ class Utils {
             "Falling Upwards",
             "Please Pick Up After Yourself",
             "Timing",
-            "Good luck",
-            "Don't Touch the Red"
+            "Don't Touch the Red",
+            "Good luck"
     };
 
     public static string formLevelName(int idx, int numNewLines, bool addLevelWord = false) {

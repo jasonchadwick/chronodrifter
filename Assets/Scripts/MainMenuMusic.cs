@@ -4,7 +4,7 @@ using UnityEngine;
 class MainMenuMusic : MonoBehaviour {
     public AudioSource music;
     public float fadeInTime;
-    private bool fadingIn;
+    private bool fadingIn = true;
 
     private static MainMenuMusic _instance;
 
@@ -12,7 +12,7 @@ class MainMenuMusic : MonoBehaviour {
         get {
             if (_instance == null) {
                 _instance = GameObject.FindObjectOfType<MainMenuMusic>();
-
+                _instance.Initialize();
                 DontDestroyOnLoad(_instance.gameObject);
             }
             return _instance;
@@ -22,6 +22,7 @@ class MainMenuMusic : MonoBehaviour {
     void Awake() {
         if (_instance == null) {
             _instance = this;
+            Initialize();
             DontDestroyOnLoad(this.gameObject);
         }
         else {
@@ -34,7 +35,7 @@ class MainMenuMusic : MonoBehaviour {
     void Update() {
         if (fadingIn) {
             if (Time.timeSinceLevelLoad < fadeInTime) {
-                music.volume = Mathf.Lerp(0, 1, Time.time / fadeInTime);
+                music.volume = Mathf.Lerp(0, 1, Time.timeSinceLevelLoad / fadeInTime);
             }
             else {
                 music.volume = 1;
@@ -43,11 +44,15 @@ class MainMenuMusic : MonoBehaviour {
         }
     }
 
+    void Initialize() {
+        fadingIn = true;
+        music.volume = 0;
+        music.Play();
+    }
+
     void Start() {
         if (!music.isPlaying) {
             fadingIn = true;
-            music.volume = 0;
-            music.Play();
         }
     }
 }
