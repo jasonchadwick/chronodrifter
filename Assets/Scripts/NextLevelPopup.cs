@@ -22,6 +22,7 @@ class NextLevelPopup : MonoBehaviour {
     }
 
     void LoadMainMenu() {
+        Destroy(FindObjectOfType<MusicManager>().gameObject);
         TimeEventManager.Reset();
         SceneManager.LoadScene("MainMenu");
     }

@@ -11,6 +11,10 @@ Platform puzzler where the direction of time flow can change.
 ## TODO
 - player can grab and move objects
   - lots of potential to use this with time reversal
+- player animations
+- player death animation/effect
+- time freeze just slows it down to 0.1 or something
+  - hard to do in reverse
 - button-operated-laser
   - can set up traps for enemies
 - enemies (generally not affected by time reversal)
@@ -19,7 +23,9 @@ Platform puzzler where the direction of time flow can change.
   - intelligent enemy that has the same time reversing powers as you
     - Many options for what the AI could look like here
 - more levels and obstacles
-- music/sounds
+- more music/sounds
+  - cube collision sounds?
+  - pillar sounds
 - better UI (buttons, main menu etc)
 - destructible objects (reassemble when inverted)
 - flowing liquids?

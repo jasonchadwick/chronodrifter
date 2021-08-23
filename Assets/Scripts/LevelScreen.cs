@@ -55,6 +55,7 @@ class LevelScreen : MonoBehaviour {
     }
 
     public void LoadLevel(int levelidx) {
+        Destroy(FindObjectOfType<MainMenuMusic>().gameObject);
         TimeEventManager.Reset();
         SceneManager.LoadScene(levelidx + 2);
     }
