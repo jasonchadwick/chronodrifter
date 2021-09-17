@@ -8,6 +8,11 @@ class TimeEventManager : MonoBehaviour {
     public static event ReverseAction OnReverse;
     public static bool isPaused;
     public static bool isReversed;
+    public static float slowScale;
+
+    void Start() {
+        slowScale = 0.1f;
+    }
 
     // should not be needed. Time reversible objects should remove
     // their functions from the event managers in OnDisable or OnDestroy.

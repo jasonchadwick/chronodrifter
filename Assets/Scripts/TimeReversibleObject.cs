@@ -9,6 +9,12 @@ public class TimeReversibleObject : MonoBehaviour {
     private Vector2 pausedVelocity;
     private float pausedAngularVelocity;
     private bool pausedReverse;
+
+    // used for slowed-down time
+    private ObjectSnap2D oldObjectSnap;
+    private ObjectSnap2D goalObjectSnap;
+    private float progressToNextSnap;
+
     public bool restoringForce = true;
     public float restoringLerp = 10.0f;
     public float similarityThreshold = 5e-2f;
@@ -31,56 +37,69 @@ public class TimeReversibleObject : MonoBehaviour {
 
     // fixedupdate bc we want this to be framerate independent
     void FixedUpdate() {
-        if (TimeEventManager.isPaused) return;
-        if (TimeEventManager.isReversed) {
-            ObjectSnap2D curSnap;
-            // move backwards in time list
-            if (objectTimeHistory.Count > 1) {
-                curSnap = objectTimeHistory.Peek();
-                if (curSnap.numIntervals <= 1) {
-                    objectTimeHistory.Pop();
+        if (TimeEventManager.isPaused) {
+            progressToNextSnap += Time.fixedDeltaTime * TimeEventManager.slowScale;
+            if (progressToNextSnap > Time.fixedDeltaTime) {
+                progressToNextSnap = 0;
+                if (TimeEventManager.isReversed) {
+                    
                 }
-                isFullyReversed = false;
             }
-            else if (objectTimeHistory.Count == 1) {
-                curSnap = objectTimeHistory.Peek();
-                isFullyReversed = true;
-            }
-            else {return;}
+            if (TimeEventManager.isReversed) {
 
-            if (restoringForce) {
-                transform.position = Vector3.Lerp(transform.position, curSnap.position, restoringLerp*Time.fixedDeltaTime);
-                transform.eulerAngles = new Vector3(0, 0, Utils.AngleLerp(transform.eulerAngles.z, curSnap.angle, restoringLerp*Time.fixedDeltaTime));
-                if (isRigidbody) {
-                    rb2D.velocity = Vector3.Lerp(rb2D.velocity, -curSnap.velocity, restoringLerp*Time.fixedDeltaTime);
-                    rb2D.angularVelocity = Mathf.Lerp(rb2D.angularVelocity, -curSnap.angularVelocity, restoringLerp*Time.fixedDeltaTime);
-                }
             }
-            else {
-                transform.position = curSnap.position;
-                transform.eulerAngles = new Vector3(0, 0, curSnap.angle);
-                if (isRigidbody) {
-                    rb2D.velocity = -curSnap.velocity;
-                    rb2D.angularVelocity = -curSnap.angularVelocity;
-                }
-            }
-
-            curSnap.numIntervals--;
         }
-        // if time is playing forward, add to state stack
         else {
-            // if in the same place as last frame, just add one to numIntervals of last state.
-            ObjectSnap2D lastState = null;
-            if ((objectTimeHistory.Count > 0
-                && (lastState = objectTimeHistory.Peek()) != null
-                && (lastState.position - Utils.Vector3to2(transform.position)).magnitude < similarityThreshold
-                && (lastState.velocity - rb2D.velocity).magnitude < similarityThreshold
-                && (lastState.angle - transform.eulerAngles.z) < similarityThreshold
-                && (lastState.angularVelocity - rb2D.angularVelocity) < similarityThreshold)) {
-                    lastState.numIntervals++;
+            if (TimeEventManager.isReversed) {
+                ObjectSnap2D curSnap;
+                // move backwards in time list
+                if (objectTimeHistory.Count > 1) {
+                    curSnap = objectTimeHistory.Peek();
+                    if (curSnap.numIntervals <= 1) {
+                        objectTimeHistory.Pop();
+                    }
+                    isFullyReversed = false;
+                }
+                else if (objectTimeHistory.Count == 1) {
+                    curSnap = objectTimeHistory.Peek();
+                    isFullyReversed = true;
+                }
+                else {return;}
+
+                if (restoringForce) {
+                    transform.position = Vector3.Lerp(transform.position, curSnap.position, restoringLerp*Time.fixedDeltaTime);
+                    transform.eulerAngles = new Vector3(0, 0, Utils.AngleLerp(transform.eulerAngles.z, curSnap.angle, restoringLerp*Time.fixedDeltaTime));
+                    if (isRigidbody) {
+                        rb2D.velocity = Vector3.Lerp(rb2D.velocity, -curSnap.velocity, restoringLerp*Time.fixedDeltaTime);
+                        rb2D.angularVelocity = Mathf.Lerp(rb2D.angularVelocity, -curSnap.angularVelocity, restoringLerp*Time.fixedDeltaTime);
+                    }
+                }
+                else {
+                    transform.position = curSnap.position;
+                    transform.eulerAngles = new Vector3(0, 0, curSnap.angle);
+                    if (isRigidbody) {
+                        rb2D.velocity = -curSnap.velocity;
+                        rb2D.angularVelocity = -curSnap.angularVelocity;
+                    }
+                }
+
+                curSnap.numIntervals--;
             }
+            // if time is playing forward, add to state stack
             else {
-                objectTimeHistory.Push(new ObjectSnap2D(transform, rb2D));
+                // if in the same place as last frame, just add one to numIntervals of last state.
+                ObjectSnap2D lastState = null;
+                if ((objectTimeHistory.Count > 0
+                    && (lastState = objectTimeHistory.Peek()) != null
+                    && (lastState.position - Utils.Vector3to2(transform.position)).magnitude < similarityThreshold
+                    && (lastState.velocity - rb2D.velocity).magnitude < similarityThreshold
+                    && (lastState.angle - transform.eulerAngles.z) < similarityThreshold
+                    && (lastState.angularVelocity - rb2D.angularVelocity) < similarityThreshold)) {
+                        lastState.numIntervals++;
+                }
+                else {
+                    objectTimeHistory.Push(new ObjectSnap2D(transform, rb2D));
+                }
             }
         }
     }
@@ -90,6 +109,9 @@ public class TimeReversibleObject : MonoBehaviour {
             rb2D.isKinematic = !rb2D.isKinematic;
         }
         if (TimeEventManager.isPaused) {
+            rb2D.mass /= TimeEventManager.slowScale;
+            rb2D.gravityScale *= TimeEventManager.slowScale;
+
             // store velocity values
             pausedReverse = TimeEventManager.isReversed;
             pausedVelocity = rb2D.velocity;
@@ -98,6 +120,14 @@ public class TimeReversibleObject : MonoBehaviour {
             rb2D.angularVelocity = 0.0f;
         }
         else {
+            rb2D.mass *= TimeEventManager.slowScale;
+            rb2D.gravityScale /= TimeEventManager.slowScale;
+
+            // clear snaps
+            oldObjectSnap = null;
+            goalObjectSnap = null;
+            progressToNextSnap = 0;
+
             // restore velocity values
             rb2D.velocity = pausedVelocity;
             rb2D.angularVelocity = pausedAngularVelocity;
@@ -113,6 +143,11 @@ public class TimeReversibleObject : MonoBehaviour {
         if (isRigidbody) {
             rb2D.velocity *= -1;
             rb2D.angularVelocity *= -1;
+        }
+        if (TimeEventManager.isPaused) {
+            ObjectSnap2D tmp = goalObjectSnap;
+            goalObjectSnap = oldObjectSnap;
+            oldObjectSnap = tmp;
         }
     }
 
