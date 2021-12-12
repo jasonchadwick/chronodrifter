@@ -51,4 +51,3 @@ class TimeGhost : MonoBehaviour {
         }
     }
 }
-// alpha 50

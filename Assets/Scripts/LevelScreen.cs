@@ -13,6 +13,7 @@ class LevelScreen : MonoBehaviour {
     public Button mainMenuButton;
 
     void Start() {
+        // assume there are 2 non-level scenes in the game (main menu and level menu)
         nlevels = SceneManager.sceneCountInBuildSettings - 2;
         canvas = GetComponent<Canvas>();
         Rect pixelRect = canvas.pixelRect;
@@ -27,6 +28,7 @@ class LevelScreen : MonoBehaviour {
         float xbuf = tileWidth * 0.05f;
         float ybuf = tileHeight * 0.05f;
 
+        // automatically place level buttons based on how many levels there are
         for (int r = 0; r < rows; r++) {
             float y = topLeftY - tileHeight * r;
             for (int c = 0; c < cols; c++) {
