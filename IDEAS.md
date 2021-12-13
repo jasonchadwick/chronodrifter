@@ -6,6 +6,10 @@
 	- idle, moving, death
 - death screen (instead of just immediately restarting)?
 - sounds - cube collision? player jump/landing, death, etc. Door opening, button being pressed...
+- original music (current music is a free Unity asset)? Not necessary but would be cool
+- some sort of backstory/motivation? or even just a more distinct theme or personality, like how Portal has GLaDOS
+	- a goal? something you are working towards?
+- can the player get more powerful over time? new abilities etc?
 - better UI (@navid...?)
 - add parent class to TimeReversibleObject
   - stack of any arbitrary object positions, stack size `nIters`
