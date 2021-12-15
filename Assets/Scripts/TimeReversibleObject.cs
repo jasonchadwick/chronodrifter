@@ -1,185 +1,71 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: make it just use a general object for the stack. How to restore values?
-// Maybe use a dictionary? And at the end reset all values?
-// Maybe the inheriting class provides its own "restore" function?
-public class TimeReversibleObject : MonoBehaviour {
-    private Stack<ObjectSnap2D> objectTimeHistory;
-    private bool isRigidbody;
-    private Rigidbody2D rb2D;
-    private bool isKinematic;
-    private Vector2 pausedVelocity;
-    private float pausedAngularVelocity;
-    private bool pausedReverse;
+// General class for a time reversible object. Maintains a stack of previous
+// states. Forward time adds new states to the stack, and reverse pops them.
 
-    // used for slowed-down time
-    private ObjectSnap2D oldObjectSnap;
-    private ObjectSnap2D goalObjectSnap;
-    private float progressToNextSnap;
-
-    public bool useHistoryStack = true;
-    public bool restoringForce = true;
-    public float restoringLerp = 10.0f;
+// TODO: make pause slow down 10x - need to only pop a new state off every 10th update.
+public abstract class TimeReversibleObject : MonoBehaviour {
+    // stack of previous states.
+    private Stack<State> objectHistory;
+    private State state;
+    private State lastState;
     public float similarityThreshold = 5e-2f;
-    public bool isFullyReversed = false;
-
 
     void Start() {
-        if ((rb2D = GetComponent<Rigidbody2D>()) == null) {
-            isRigidbody = false;
-        }
-        else {
-            isRigidbody = true;
-            isKinematic = rb2D.isKinematic;
-        }
-        objectTimeHistory = new Stack<ObjectSnap2D>();
-
-        TimeEventManager.OnPause += UpdateOnPause;
-        TimeEventManager.OnReverse += UpdateOnReverse;
+        objectHistory = new Stack<State>();
+        ChildStart();
     }
 
-    // fixedupdate bc we want this to be framerate independent
     void FixedUpdate() {
-        if (TimeEventManager.isPaused) {
-            progressToNextSnap += Time.fixedDeltaTime * TimeEventManager.slowScale;
-            if (progressToNextSnap > Time.fixedDeltaTime) {
-                progressToNextSnap = 0;
-                if (TimeEventManager.isReversed) {
-                    
-                }
-            }
+        if (!TimeEventManager.isPaused) {
             if (TimeEventManager.isReversed) {
-
-            }
-        }
-        else {
-            if (TimeEventManager.isReversed) {
-                ObjectSnap2D curSnap;
-                // move backwards in time list
-                if (objectTimeHistory.Count > 1) {
-                    curSnap = objectTimeHistory.Peek();
-                    if (curSnap.numIntervals <= 1) {
-                        objectTimeHistory.Pop();
+                if (objectHistory.Count > 1) {
+                    state = objectHistory.Peek();
+                    if (state.numIntervals <= 1) {
+                        objectHistory.Pop();
                     }
-                    isFullyReversed = false;
                 }
-                else if (objectTimeHistory.Count == 1) {
-                    curSnap = objectTimeHistory.Peek();
-                    isFullyReversed = true;
-                }
-                else {return;}
-
-                if (restoringForce && Vector2.Distance(transform.position, curSnap.position) < 1) {
-                    transform.position = Vector3.Lerp(transform.position, curSnap.position, restoringLerp*Time.fixedDeltaTime);
-                    transform.eulerAngles = new Vector3(0, 0, Utils.AngleLerp(transform.eulerAngles.z, curSnap.angle, restoringLerp*Time.fixedDeltaTime));
-                    if (isRigidbody) {
-                        rb2D.velocity = Vector3.Lerp(rb2D.velocity, -curSnap.velocity, restoringLerp*Time.fixedDeltaTime);
-                        rb2D.angularVelocity = Mathf.Lerp(rb2D.angularVelocity, -curSnap.angularVelocity, restoringLerp*Time.fixedDeltaTime);
-                    }
+                else if (objectHistory.Count == 1) {
+                    state = objectHistory.Peek();
                 }
                 else {
-                    transform.position = curSnap.position;
-                    transform.eulerAngles = new Vector3(0, 0, curSnap.angle);
-                    if (isRigidbody) {
-                        rb2D.velocity = -curSnap.velocity;
-                        rb2D.angularVelocity = -curSnap.angularVelocity;
-                    }
+                    OnStackEmpty();
                 }
 
-                curSnap.numIntervals--;
+                UpdateObjectState(state);
+                state.numIntervals--;
             }
-            // if time is playing forward, add to state stack
             else {
-                // if in the same place as last frame, just add one to numIntervals of last state.
-                ObjectSnap2D lastState = null;
-                if ((objectTimeHistory.Count > 0
-                    && (lastState = objectTimeHistory.Peek()) != null
-                    && (lastState.position - Utils.Vector3to2(transform.position)).magnitude < similarityThreshold
-                    && (lastState.velocity - rb2D.velocity).magnitude < similarityThreshold
-                    && (lastState.angle - transform.eulerAngles.z) < similarityThreshold
-                    && (lastState.angularVelocity - rb2D.angularVelocity) < similarityThreshold)) {
+                state = GetCurrentState();
+                if (objectHistory.Count > 0) {
+                    lastState = objectHistory.Peek();
+                    if (GetStateDifference(state, lastState) < similarityThreshold) {
                         lastState.numIntervals++;
+                    }
+                    else {
+                        objectHistory.Push(state);
+                    }
                 }
                 else {
-                    objectTimeHistory.Push(new ObjectSnap2D(transform, rb2D));
+                    objectHistory.Push(state);
                 }
             }
         }
+        ChildFixedUpdate();
     }
 
-    void UpdateOnPause() {
-        if (isRigidbody && !isKinematic) {
-            rb2D.isKinematic = !rb2D.isKinematic;
-        }
-        if (TimeEventManager.isPaused) {
-            rb2D.mass /= TimeEventManager.slowScale;
-            rb2D.gravityScale *= TimeEventManager.slowScale;
-
-            // store velocity values
-            pausedReverse = TimeEventManager.isReversed;
-            pausedVelocity = rb2D.velocity;
-            pausedAngularVelocity = rb2D.angularVelocity;
-            rb2D.velocity = new Vector2(0, 0);
-            rb2D.angularVelocity = 0.0f;
-        }
-        else {
-            rb2D.mass *= TimeEventManager.slowScale;
-            rb2D.gravityScale /= TimeEventManager.slowScale;
-
-            // clear snaps
-            oldObjectSnap = null;
-            goalObjectSnap = null;
-            progressToNextSnap = 0;
-
-            // restore velocity values
-            rb2D.velocity = pausedVelocity;
-            rb2D.angularVelocity = pausedAngularVelocity;
-            if (pausedReverse ^ TimeEventManager.isReversed) {
-                // if reverse mode has changed, invert velocity
-                rb2D.velocity *= -1;
-                rb2D.angularVelocity *= -1;
-            }
-        }
-    }
-
-    void UpdateOnReverse() {
-        if (isRigidbody) {
-            rb2D.velocity *= -1;
-            rb2D.angularVelocity *= -1;
-        }
-        if (TimeEventManager.isPaused) {
-            ObjectSnap2D tmp = goalObjectSnap;
-            goalObjectSnap = oldObjectSnap;
-            oldObjectSnap = tmp;
-        }
-    }
-
-    void OnDisable() {
-        TimeEventManager.OnPause -= UpdateOnPause;
-        TimeEventManager.OnReverse -= UpdateOnReverse;
-    }
+    // The following functions must be implemented by each child class.
+    public virtual State GetCurrentState() {return new State();}
+    public virtual float GetStateDifference(State state1, State state2) {return 0.0f;}
+    public virtual void UpdateObjectState(State s) {}
+    public virtual void OnStackEmpty() {}
+    public virtual void ChildStart() {}
+    public virtual void ChildFixedUpdate() {}
 }
 
-// general object that can be time reversed
-// possible optimization: for non-rigidbodies, don't save linear/angular velocity
-public class ObjectSnap2D {
-    public Vector2 position;
-
-    // third Euler angle (the only one we need for 2D)
-    public float angle;
-    public Vector2 velocity;
-    public float angularVelocity;
-    public int numIntervals;
-
-    public ObjectSnap2D (Transform transform, Rigidbody2D rb = null) {
-        position = transform.position;
-        angle = transform.eulerAngles.z;
-        numIntervals = 1;
-
-        if (rb) {
-            velocity = rb.velocity;
-            angularVelocity = rb.angularVelocity;
-        }
-    }
+// child classes of TimeReversibleObject will implement a specific State class.
+public class State : Object {
+    // Number of FixedUpdate iterations for which the object has been in this State.
+    public int numIntervals = 1;
 }

@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
+//TODO: give dropper an "acceleration field" inside of it
 class SquareDropper : ActivatedObject {
     public GameObject squarePrefab;
-    public float initVelocity;
+    public float force;
     public float spawnInterval = 5.0f;
     public float fadeTime = 1.0f;
     public float accelTime = 0.5f;
@@ -22,24 +23,22 @@ class SquareDropper : ActivatedObject {
     private Color lastAchievedColor;
     private float squareLifetime;
 
-    void Start() {
+    public override void ChildStart() {
         square = null;
         squareRenderer = null;
         squareLight = null;
         squareLifetime = spawnInterval - startDelay;
-        useHistoryStack = false; // does not move, so we don't need the history stack
+        GetComponentInChildren<AreaEffector2D>().forceMagnitude = force;
     }
 
-    void FixedUpdate() {
+    public override void ChildFixedUpdate() {
         if (isActive && !TimeEventManager.isPaused) {
             if (TimeEventManager.isReversed) {
-                if (!square.GetComponent<TimeReversibleObject>().isFullyReversed) {
-                    if (squareLifetime > 0) {
-                        squareLifetime -= Time.deltaTime;
-                    }
-                    else {
-                        squareLifetime = 0;
-                    }
+                if (squareLifetime > 0) {
+                    squareLifetime -= Time.fixedDeltaTime;
+                }
+                else {
+                    squareLifetime = 0;
                 }
             }
             else if (!TimeEventManager.isReversed) {
@@ -50,6 +49,7 @@ class SquareDropper : ActivatedObject {
                     if (square != null && squareRenderer != null && squareLight != null) {
                         square.transform.position = transform.position;
                         square.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                        square.GetComponent<Rigidbody2D>().angularVelocity = 0.0f;
                         square.transform.rotation = transform.rotation;
                         squareRenderer.color = oldColor;
                         squareLight.intensity = oldIntensity;
@@ -59,14 +59,14 @@ class SquareDropper : ActivatedObject {
                         squareRenderer = square.GetComponent<SpriteRenderer>();
                         oldColor = squareRenderer.color;
                         goalColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
-                        square.GetComponent<TimeReversibleObject>().restoringForce = true;
+                        square.GetComponent<TimeReversibleRigidbody>().restoringForce = true;
                         squareLight = square.GetComponentInChildren<Light2D>();
                         oldIntensity = squareLight.intensity;
                     }
                     squareLifetime = 0;
                 }
                 else if (squareLifetime < accelTime && square != null) {
-                    square.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(0, -initVelocity));
+                    //square.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(0, -initVelocity));
                 }
                 squareLifetime += Time.fixedDeltaTime;
             }

@@ -9,14 +9,14 @@ class Elevator : ActivatedObject {
     private Color backColor;
     private bool paused;
 
-    void Start() {
+    public override void ChildStart() {
         backColor = new Color(frontColor.r, frontColor.g, frontColor.b, 0);
         paused = false;
         TimeEventManager.OnPause += Pause;
         TimeEventManager.OnReverse += Reverse;
     }
 
-    void Update() {
+    public override void ChildFixedUpdate() {
         if (!paused && isActive) {
             foreach (Transform childTransform in transform) {
                 GameObject child = childTransform.gameObject;
@@ -27,21 +27,21 @@ class Elevator : ActivatedObject {
                 ShadowCaster2D shadows = child.GetComponent<ShadowCaster2D>();
 
                 if (platform.isInFront) {
-                    srender.color = Color.Lerp(srender.color, frontColor, colorChangeLerp*Time.deltaTime);
+                    srender.color = Color.Lerp(srender.color, frontColor, colorChangeLerp*Time.fixedDeltaTime);
                     collider.enabled = true;
                     shadows.enabled = true;
                     child.layer = 6;
                 }
                 else {
                     childVelocity = -velocity;
-                    srender.color = Color.Lerp(srender.color, backColor, colorChangeLerp*Time.deltaTime);
+                    srender.color = Color.Lerp(srender.color, backColor, colorChangeLerp*Time.fixedDeltaTime);
                     if (srender.color.a < 0.1) {
                         collider.enabled = false;
                         shadows.enabled = false;
                     }
                     child.layer = 3;
                 }
-                childTransform.position += Vector3.up * childVelocity * Time.deltaTime;
+                childTransform.position += Vector3.up * childVelocity * Time.fixedDeltaTime;
 
                 if (childTransform.position.y >= transform.position.y + 6) {
                     if (velocity > 0) {
@@ -63,10 +63,6 @@ class Elevator : ActivatedObject {
                 }
             }
         }
-    }
-
-    void FixedUpdate() {
-        
     }
 
     void Pause() {

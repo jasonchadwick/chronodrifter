@@ -1,37 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// same idea as TimeReversibleObject but only need positions instead of everything else.
-class TimeGhost : MonoBehaviour {
+class TimeGhost : TimeReversibleObject {
     public GameObject ghostPrefab;
-    private Stack<Vector2> positionHistory;
     private GameObject ghost;
 
-    void Start() {
+    public override void ChildStart() {
         TimeEventManager.OnPause += OnPause;
         TimeEventManager.OnReverse += OnReverse;
-        positionHistory = new Stack<Vector2>();
-        positionHistory.Push(Utils.Vector3to2(transform.position));
-    }
-
-    void FixedUpdate() {
-        if (!TimeEventManager.isPaused) {
-            if (TimeEventManager.isReversed) {
-                if (positionHistory.Count > 0) {
-                    ghost.transform.position = positionHistory.Pop();
-                }
-                else {
-                    Destroy(ghost);
-                }
-            }
-            else {
-                positionHistory.Push(Utils.Vector3to2(transform.position));
-            }
-        }
     }
 
     void OnPause() {
-        if (TimeEventManager.isPaused && !TimeEventManager.isReversed) {
+        if (TimeEventManager.isPaused && TimeEventManager.isReversed && ghost == null) {
             ghost = Instantiate(ghostPrefab, transform.position, transform.rotation);
         }
         else {
@@ -40,14 +20,44 @@ class TimeGhost : MonoBehaviour {
     }
 
     void OnReverse() {
-        if (TimeEventManager.isReversed && !TimeEventManager.isPaused) {
+        if (TimeEventManager.isReversed && !TimeEventManager.isPaused && ghost == null) {
             ghost = Instantiate(ghostPrefab, transform.position, transform.rotation);
         }
         else {
-            if (ghost != null) {
-                positionHistory.Clear();
-                Destroy(ghost);
-            }
+            Destroy(ghost);
         }
+    }
+
+    public override State GetCurrentState()
+    {
+        return new PositionState(Utils.Vector3to2(transform.position));
+    }
+
+    public override float GetStateDifference(State s1, State s2)
+    {
+        PositionState state1 = s1 as PositionState;
+        PositionState state2 = s2 as PositionState;
+        return (state1.position - state2.position).magnitude;
+    }
+
+    public override void UpdateObjectState(State s)
+    {   
+        PositionState state = s as PositionState;
+        if (ghost != null) {
+            ghost.transform.position = state.position;
+        }
+    }
+
+    public override void OnStackEmpty()
+    {
+        Destroy(ghost);
+    }
+}
+
+public class PositionState : State {
+    public Vector2 position;
+
+    public PositionState(Vector2 p) {
+        position = p;
     }
 }

@@ -6,6 +6,7 @@ class Utils {
             "Your Education Begins",
             "Some Basic Time Travel",
             "Up Down Up",
+            "Floating",
             "Falling Upwards",
             "Please Pick Up After Yourself",
             "Timing",
