@@ -4,6 +4,7 @@
 ### General
 - **player animations**
 	- idle, moving, death
+	- expanding light pulse/flash across screen when time is frozen/reversed
 - **death screen (instead of just immediately restarting)?**
 	- OR: when you die, quickly reverses all the time that you used and then restarts the level
 - **sounds - cube collision? player jump/landing, death, etc. Door opening, button being pressed...**
