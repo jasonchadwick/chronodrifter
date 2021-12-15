@@ -14,6 +14,7 @@ class PressableButton : MonoBehaviour {
     private bool activated;
     private bool pressingDown;
     private Stack<float> yHistory;
+    private ActivatedObject targetComponent;
 
     void Start() {
         timePressed = 0;
@@ -25,6 +26,7 @@ class PressableButton : MonoBehaviour {
         initY = plateTransform.localPosition.y;
         initZ = plateTransform.localPosition.z;
         yHistory = new Stack<float>();
+        targetComponent = target.GetComponent<ActivatedObject>();
     }
 
     void OnTriggerEnter2D(Collider2D obj) {
@@ -73,13 +75,13 @@ class PressableButton : MonoBehaviour {
         }
 
         if (activated) {
-            target.GetComponent<ButtonActivatedObject>().isActive = true;
+            targetComponent.isActive = !targetComponent.defaultActiveStatus;
             foreach (Light2D light in plateTransform.GetComponentsInChildren<Light2D>()) {
                 light.intensity = 1;
             }
         }
         else {
-            target.GetComponent<ButtonActivatedObject>().isActive = false;
+            targetComponent.isActive = targetComponent.defaultActiveStatus;
             foreach (Light2D light in plateTransform.GetComponentsInChildren<Light2D>()) {
                 light.intensity = 0;
             }

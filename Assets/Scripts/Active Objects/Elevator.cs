@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-class Elevator : ButtonActivatedObject {
+class Elevator : ActivatedObject {
     public float velocity = 1.0f;
     public Color frontColor = Color.white;
     public float colorChangeLerp = 1.0f;
@@ -63,6 +63,10 @@ class Elevator : ButtonActivatedObject {
                 }
             }
         }
+    }
+
+    void FixedUpdate() {
+        
     }
 
     void Pause() {

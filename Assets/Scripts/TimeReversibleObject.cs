@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: make it just use a general object for the stack. How to restore values?
+// Maybe use a dictionary? And at the end reset all values?
+// Maybe the inheriting class provides its own "restore" function?
 public class TimeReversibleObject : MonoBehaviour {
     private Stack<ObjectSnap2D> objectTimeHistory;
     private bool isRigidbody;
@@ -15,6 +18,7 @@ public class TimeReversibleObject : MonoBehaviour {
     private ObjectSnap2D goalObjectSnap;
     private float progressToNextSnap;
 
+    public bool useHistoryStack = true;
     public bool restoringForce = true;
     public float restoringLerp = 10.0f;
     public float similarityThreshold = 5e-2f;
@@ -66,7 +70,7 @@ public class TimeReversibleObject : MonoBehaviour {
                 }
                 else {return;}
 
-                if (restoringForce) {
+                if (restoringForce && Vector2.Distance(transform.position, curSnap.position) < 1) {
                     transform.position = Vector3.Lerp(transform.position, curSnap.position, restoringLerp*Time.fixedDeltaTime);
                     transform.eulerAngles = new Vector3(0, 0, Utils.AngleLerp(transform.eulerAngles.z, curSnap.angle, restoringLerp*Time.fixedDeltaTime));
                     if (isRigidbody) {

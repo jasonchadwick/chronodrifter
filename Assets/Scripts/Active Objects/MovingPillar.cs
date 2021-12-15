@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class MovingPillar : ButtonActivatedObject {
+class MovingPillar : ActivatedObject {
     public float baseYScale;
     public float activeYScale;
     public float moveTime;

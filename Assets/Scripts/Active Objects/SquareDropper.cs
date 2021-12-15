@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-class SquareDropper : ButtonActivatedObject {
+class SquareDropper : ActivatedObject {
     public GameObject squarePrefab;
     public float initVelocity;
     public float spawnInterval = 5.0f;
@@ -24,14 +24,22 @@ class SquareDropper : ButtonActivatedObject {
 
     void Start() {
         square = null;
+        squareRenderer = null;
+        squareLight = null;
         squareLifetime = spawnInterval - startDelay;
+        useHistoryStack = false; // does not move, so we don't need the history stack
     }
 
     void FixedUpdate() {
         if (isActive && !TimeEventManager.isPaused) {
             if (TimeEventManager.isReversed) {
                 if (!square.GetComponent<TimeReversibleObject>().isFullyReversed) {
-                    squareLifetime -= Time.deltaTime;
+                    if (squareLifetime > 0) {
+                        squareLifetime -= Time.deltaTime;
+                    }
+                    else {
+                        squareLifetime = 0;
+                    }
                 }
             }
             else if (!TimeEventManager.isReversed) {
@@ -39,18 +47,23 @@ class SquareDropper : ButtonActivatedObject {
                     if (Time.timeSinceLevelLoad > 0.05) {
                         dropSound.Play();
                     }
-                    if (square != null) {
-                        Destroy(square);
+                    if (square != null && squareRenderer != null && squareLight != null) {
+                        square.transform.position = transform.position;
+                        square.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                        square.transform.rotation = transform.rotation;
+                        squareRenderer.color = oldColor;
+                        squareLight.intensity = oldIntensity;
                     }
-                    square = Instantiate(squarePrefab, transform.position, transform.rotation);
+                    else {
+                        square = Instantiate(squarePrefab, transform.position, transform.rotation);
+                        squareRenderer = square.GetComponent<SpriteRenderer>();
+                        oldColor = squareRenderer.color;
+                        goalColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
+                        square.GetComponent<TimeReversibleObject>().restoringForce = true;
+                        squareLight = square.GetComponentInChildren<Light2D>();
+                        oldIntensity = squareLight.intensity;
+                    }
                     squareLifetime = 0;
-                    
-                    square.GetComponent<TimeReversibleObject>().restoringForce = true;
-                    squareRenderer = square.GetComponent<SpriteRenderer>();
-                    oldColor = squareRenderer.color;
-                    goalColor = new Color(oldColor.r, oldColor.g, oldColor.b, 0);
-                    squareLight = square.GetComponentInChildren<Light2D>();
-                    oldIntensity = squareLight.intensity;
                 }
                 else if (squareLifetime < accelTime && square != null) {
                     square.GetComponent<Rigidbody2D>().AddRelativeForce(new Vector2(0, -initVelocity));
