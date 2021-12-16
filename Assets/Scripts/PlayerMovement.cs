@@ -6,6 +6,7 @@ class PlayerMovement : Character {
     public float walkStrength = 1.0f;
     public float maxHorizontalVelocity = 5.0f;
     public float selfRightingLerp = 1.0f;
+    public float horizontalDampingLerp = 150.0f;
     Rigidbody2D rb2D;
     private bool isOnGround;
 
@@ -25,6 +26,12 @@ class PlayerMovement : Character {
         }
         else if (Input.GetKey(KeyCode.D) && rb2D.velocity.x < maxHorizontalVelocity) {
             rb2D.AddForce(new Vector2(walkStrength, 0));
+        }
+    }
+
+    void FixedUpdate() {
+        if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D)) {
+            rb2D.velocity = Vector2.Lerp(rb2D.velocity, new Vector2(0, rb2D.velocity.y), horizontalDampingLerp * Time.fixedDeltaTime);
         }
     }
 

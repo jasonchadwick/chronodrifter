@@ -271,9 +271,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpStrength: 14
-  walkStrength: 35
+  walkStrength: 45
   maxHorizontalVelocity: 9
   selfRightingLerp: 10
+  horizontalDampingLerp: 10
 --- !u!114 &7166212357868415359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -330,6 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2459d031ed754248b98e41961bf55db0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  similarityThreshold: 0.05
   ghostPrefab: {fileID: 7151350628726681011, guid: 3af18139c512930128f49b4ce2d5b7ac, type: 3}
 --- !u!61 &1617006194879576696
 BoxCollider2D:
