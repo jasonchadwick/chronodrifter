@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 6464710025889035266}
   - component: {fileID: 6924180766345632684}
   - component: {fileID: 8023278766387135188}
-  - component: {fileID: 8214468334883807091}
   - component: {fileID: 6472181411170540357}
+  - component: {fileID: 308165885255895567}
   m_Layer: 0
-  m_Name: Square Lit
+  m_Name: Square Lit Despawning
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,22 +135,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &8214468334883807091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: -6973641111637051048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aa4dbcaf9157d375bfdc79f9685b20f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  similarityThreshold: 0.01
-  useHistoryStack: 1
-  restoringForce: 1
-  restoringLerp: 15
 --- !u!114 &6472181411170540357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +160,25 @@ MonoBehaviour:
   - {x: -0.2437867, y: 0.24889612, z: 0}
   m_ShapePathHash: 1101714981
   m_Mesh: {fileID: 0}
-  m_InstanceId: 98590
+  m_InstanceId: 99112
+--- !u!114 &308165885255895567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: -6973641111637051048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f8afc094ba87d3a8f34891e4367125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  similarityThreshold: 0.01
+  restoringForce: 1
+  restoringLerp: 15
+  respawns: 1
+  lifetime: 5
+  fadeTime: 1
 --- !u!1 &2869722296901259985
 GameObject:
   m_ObjectHideFlags: 0

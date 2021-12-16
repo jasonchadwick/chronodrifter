@@ -12,16 +12,10 @@
 	- a goal? something you are working towards?
 - can the player get more powerful over time? new abilities etc?
 - **better UI for main menu, level screen, popups**
-- add parent class to TimeReversibleObject
-  - stack of any arbitrary object positions, stack size = `nIters`
-  - functions: GetLastState() and PushState()
-  - it takes care of `nIters`++/--
-  - use for Square, MovingPillar
-  - could use special case for objects with no start/end? (i.e. elevator) auto set nIters to infinity?
-  - automatically don't add to stack if object has not changed state
-	- instead, increment delta time of top stack element
 - **some clear visual distinction between time-reversible and non-time-reversible objects**
 	- maybe time-reversible objects glow?
+- smart hints (i.e. if player is stuck for a while, give a hint like "Reminder: use F to freeze time.")
+	- or if they haven't pressed SPACE yet on a level that needs it, say that.
 
 ### New levels
 - massless cubes floating in space, need to float downwards on one of them to get to a button, then reverse back up

@@ -5,15 +5,12 @@ using UnityEngine.Experimental.Rendering.Universal;
 public class TimeReversibleRigidbody : TimeReversibleObject {
     private Stack<Rigidbody2DState> objectTimeHistory;
     private bool isRigidbody;
-    private Rigidbody2D rb2D;
+    protected Rigidbody2D rb2D;
     private bool isKinematic;
     private Vector2 pausedVelocity;
     private float pausedAngularVelocity;
     private bool pausedReverse;
 
-    private Rigidbody2DState curSnap;
-
-    public bool useHistoryStack = true;
     public bool restoringForce = true;
     public float restoringLerp = 10.0f;
 
@@ -31,12 +28,7 @@ public class TimeReversibleRigidbody : TimeReversibleObject {
     }
     
     public override State GetCurrentState() {
-        Light2D light = GetComponentInChildren<Light2D>();
-        float intensity = 0.0f;
-        if (light != null) {
-            intensity = light.intensity;
-        }
-        return new Rigidbody2DState(transform, rb2D, GetComponent<SpriteRenderer>().color, intensity);
+        return new Rigidbody2DState(transform, rb2D);
     }
      
     public override float GetStateDifference(State s1, State s2) {
@@ -71,17 +63,13 @@ public class TimeReversibleRigidbody : TimeReversibleObject {
                 rb2D.angularVelocity = -state.angularVelocity;
             }
         }
-        GetComponent<SpriteRenderer>().color = state.color;
-        Light2D light = GetComponentInChildren<Light2D>();
-        if (light != null) {
-            light.intensity = state.intensity;
-        }
     }
-
-    public override void ChildFixedUpdate() {}
 
     void UpdateOnPause() {
         if (TimeEventManager.isPaused) {
+            if (!isKinematic) {
+                rb2D.isKinematic = true;
+            }
             // store velocity values
             pausedReverse = TimeEventManager.isReversed;
             pausedVelocity = rb2D.velocity;
@@ -90,8 +78,8 @@ public class TimeReversibleRigidbody : TimeReversibleObject {
             rb2D.angularVelocity = 0.0f;
         }
         else {
-            if (isKinematic) {
-                rb2D.isKinematic = true;
+            if (!isKinematic) {
+                rb2D.isKinematic = false;
             }
             // restore velocity values
             rb2D.velocity = pausedVelocity;
@@ -126,16 +114,11 @@ public class Rigidbody2DState : State {
     public float angle;
     public Vector2 velocity;
     public float angularVelocity;
-    public Color color;
-    public float intensity;
 
-    public Rigidbody2DState (Transform transform, Rigidbody2D rb, Color c, float i) {
+
+    public Rigidbody2DState (Transform transform, Rigidbody2D rb) {
         position = transform.position;
         angle = transform.eulerAngles.z;
-
-        // TODO: make subclass for lit square, including these properties
-        color = c;
-        intensity = i;
 
         if (rb) {
             velocity = rb.velocity;
