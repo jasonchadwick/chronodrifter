@@ -28,6 +28,7 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                 }
                 else if (objectHistory.Count == 1) {
                     state = objectHistory.Peek();
+                    OnStackSize1(state);
                 }
                 else {
                     OnStackEmpty();
@@ -59,6 +60,7 @@ public abstract class TimeReversibleObject : MonoBehaviour {
     public virtual State GetCurrentState() {return new State();}
     public virtual float GetStateDifference(State state1, State state2) {return 0.0f;}
     public virtual void UpdateObjectState(State s) {}
+    public virtual void OnStackSize1(State s) {}
     public virtual void OnStackEmpty() {}
     public virtual void ChildStart() {}
     public virtual void ChildFixedUpdate() {}

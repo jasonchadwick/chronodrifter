@@ -10,7 +10,6 @@ class Utils {
             "Falling Upwards",
             "Please Pick Up After Yourself",
             "Timing",
-            "Don't Touch the Red",
             "Good luck"
     };
 

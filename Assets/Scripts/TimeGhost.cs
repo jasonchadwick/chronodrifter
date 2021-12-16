@@ -48,6 +48,11 @@ class TimeGhost : TimeReversibleObject {
         }
     }
 
+    public override void OnStackSize1(State s)
+    {
+        Destroy(ghost);
+    }
+
     public override void OnStackEmpty()
     {
         Destroy(ghost);
