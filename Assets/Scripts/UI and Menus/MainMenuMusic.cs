@@ -34,8 +34,8 @@ class MainMenuMusic : MonoBehaviour {
 
     void Update() {
         if (fadingIn) {
-            if (Time.timeSinceLevelLoad < fadeInTime) {
-                music.volume = Mathf.Lerp(0, 1, Time.timeSinceLevelLoad / fadeInTime);
+            if (Time.time < fadeInTime) {
+                music.volume = Mathf.Lerp(0, 1, Time.time / fadeInTime);
             }
             else {
                 music.volume = 1;
