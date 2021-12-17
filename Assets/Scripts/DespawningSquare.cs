@@ -7,6 +7,7 @@ public class DespawningSquare : TimeReversibleRigidbody {
     private Light2D squareLight;
     private SpriteRenderer rendererObject;
     private Collider2D boxCollider;
+    private ShadowCaster2D shadows;
     private Vector2 spawnPos = new Vector2(0, 0);
     private float spawnAngle = 0.0f;
     private Color spawnColor;
@@ -14,7 +15,6 @@ public class DespawningSquare : TimeReversibleRigidbody {
     private Color endColor;
 
     public float elapsedLifetime;
-    public bool respawns;
     public float lifetime;
     public float fadeTime;
 
@@ -24,6 +24,7 @@ public class DespawningSquare : TimeReversibleRigidbody {
         squareLight = GetComponentInChildren<Light2D>();
         rendererObject = GetComponent<SpriteRenderer>();
         boxCollider = GetComponent<Collider2D>();
+        shadows = GetComponent<ShadowCaster2D>();
         spawnPos = Utils.Vector3to2(transform.position);
         spawnColor = rendererObject.color;
         spawnIntensity = squareLight.intensity;
@@ -45,11 +46,12 @@ public class DespawningSquare : TimeReversibleRigidbody {
         rendererObject.color = spawnColor;
         squareLight.intensity = spawnIntensity;
         boxCollider.enabled = true;
+        shadows.enabled = true;
     }
 
     public override State GetCurrentState()
     {
-        return new DespawningSquareState(transform, rb2D, rendererObject.color, squareLight.intensity, elapsedLifetime);
+        return new DespawningSquareState(transform, rb2D, rendererObject.color, squareLight.intensity, elapsedLifetime, shadows.enabled);
     }
 
     // GetStateDifference same as parent
@@ -61,20 +63,23 @@ public class DespawningSquare : TimeReversibleRigidbody {
         rendererObject.color = state.color;
         squareLight.intensity = state.intensity;
         elapsedLifetime = state.lifetime;
+        shadows.enabled = state.shadowsEnabled;
     }
 
     public override void ChildFixedUpdate() {
         if (!TimeEventManager.isPaused && !TimeEventManager.isReversed) {
             elapsedLifetime += Time.fixedDeltaTime;
-            if (elapsedLifetime > lifetime - fadeTime) {
+            if (lifetime - elapsedLifetime <= fadeTime && elapsedLifetime < lifetime) {
                 float lerp = 1 - (lifetime - elapsedLifetime) / fadeTime;
                 rendererObject.color = Color.Lerp(spawnColor, endColor, lerp);
                 squareLight.intensity = Mathf.Lerp(spawnIntensity, 0, lerp);
             }
-            else if (elapsedLifetime > lifetime) {
+            else if (elapsedLifetime >= lifetime) {
                 rendererObject.color = endColor;
                 squareLight.intensity = 0;
                 boxCollider.enabled = false;
+                shadows.enabled = false;
+                Debug.Log(shadows.enabled);
             }
         }
     }
@@ -84,10 +89,12 @@ public class DespawningSquareState : Rigidbody2DState {
     public Color color;
     public float intensity;
     public float lifetime;
+    public bool shadowsEnabled;
 
-    public DespawningSquareState(Transform transform, Rigidbody2D rb, Color c, float i, float lt) : base(transform, rb) {
+    public DespawningSquareState(Transform transform, Rigidbody2D rb, Color c, float i, float lt, bool s) : base(transform, rb) {
         color = c;
         intensity = i;
         lifetime = lt;
+        shadowsEnabled = s;
     }
 }

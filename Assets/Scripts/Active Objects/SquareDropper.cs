@@ -5,7 +5,6 @@ using UnityEngine.Experimental.Rendering.Universal;
 //TODO: give dropper an "acceleration field" inside of it
 class SquareDropper : ActivatedObject {
     public DespawningSquare squarePrefab;
-    public float maxTorque;
     public float force;
     public float spawnInterval = 5.0f;
     public float fadeTime = 1.0f;
@@ -32,7 +31,6 @@ class SquareDropper : ActivatedObject {
                     if (forwardTimeSinceLevelLoad > startDelay) {
                         dropSound.Play();
                         square = Instantiate(squarePrefab, transform.position, transform.rotation);
-                        square.respawns = true;
                         square.lifetime = spawnInterval;
 
                         hasSpawnedSquare = true;
