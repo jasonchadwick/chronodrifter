@@ -4,17 +4,18 @@ using UnityEngine;
 // General class for a time reversible object. Maintains a stack of previous
 // states. Forward time adds new states to the stack, and reverse pops them.
 
-// TODO: make pause slow down 10x - need to only pop a new state off every 10th update.
 public abstract class TimeReversibleObject : MonoBehaviour {
     // stack of previous states.
     private Stack<State> objectHistory;
     private State state;
     private State lastState;
     public float similarityThreshold = 5e-2f;
+    public float maxStackSize = 1; // one hour
 
     void Start() {
         objectHistory = new Stack<State>();
         ChildStart();
+        maxStackSize = 60*60/Time.fixedDeltaTime; // one hour
     }
 
     void FixedUpdate() {
@@ -37,7 +38,7 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                 UpdateObjectState(state);
                 state.numIntervals--;
             }
-            else {
+            else if (objectHistory.Count < maxStackSize) {
                 state = GetCurrentState();
                 if (objectHistory.Count > 0) {
                     lastState = objectHistory.Peek();

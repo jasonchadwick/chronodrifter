@@ -39,6 +39,8 @@ public class DespawningSquare : TimeReversibleRigidbody {
         }
         elapsedLifetime = 0;
         transform.position = (Vector3) pos;
+        rb2D.velocity = Vector2.zero;
+        rb2D.angularVelocity = 0.0f;
         transform.eulerAngles = new Vector3(0, 0, angle);
         rendererObject.color = spawnColor;
         squareLight.intensity = spawnIntensity;
@@ -54,8 +56,8 @@ public class DespawningSquare : TimeReversibleRigidbody {
 
     public override void UpdateObjectState(State s)
     {
-        DespawningSquareState state = (DespawningSquareState) s;
         base.UpdateObjectState(s);
+        DespawningSquareState state = (DespawningSquareState) s;
         rendererObject.color = state.color;
         squareLight.intensity = state.intensity;
         elapsedLifetime = state.lifetime;

@@ -101,7 +101,7 @@ AreaEffector2D:
   m_UseGlobalAngle: 0
   m_ForceAngle: -90
   m_ForceMagnitude: 100
-  m_ForceVariation: 0
+  m_ForceVariation: 2
   m_ForceTarget: 0
   m_Drag: 0
   m_AngularDrag: 0
@@ -249,7 +249,7 @@ MonoBehaviour:
   - {x: -1.6, y: 1.6, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 104186
+  m_InstanceId: 40794
 --- !u!114 &1306551338907400572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,6 +263,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   similarityThreshold: 0.05
+  maxStackSize: 1
   isActive: 1
   defaultActiveStatus: 0
   squarePrefab: {fileID: 308165885255895567, guid: 657d434b62f2ed9869b49bb395c81781, type: 3}
