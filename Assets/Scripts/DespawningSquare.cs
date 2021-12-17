@@ -79,7 +79,6 @@ public class DespawningSquare : TimeReversibleRigidbody {
                 squareLight.intensity = 0;
                 boxCollider.enabled = false;
                 shadows.enabled = false;
-                Debug.Log(shadows.enabled);
             }
         }
     }
