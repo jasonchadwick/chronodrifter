@@ -23,7 +23,7 @@ class SquareDropper : ActivatedObject {
     }
 
     public override void ChildFixedUpdate() {
-        if (isActive && !TimeEventManager.isPaused) {
+        if (IsActive() && !TimeEventManager.isPaused) {
             if (!TimeEventManager.isReversed) {
                 if (!hasSpawnedSquare) {
                     forwardTimeSinceLevelLoad += Time.fixedDeltaTime;

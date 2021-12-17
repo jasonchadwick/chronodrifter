@@ -17,7 +17,7 @@ class Elevator : ActivatedObject {
     }
 
     public override void ChildFixedUpdate() {
-        if (!TimeEventManager.isPaused && isActive) {
+        if (!TimeEventManager.isPaused && IsActive()) {
             foreach (Transform childTransform in transform) {
                 GameObject child = childTransform.gameObject;
                 SpriteRenderer srender = child.GetComponent<SpriteRenderer>();
