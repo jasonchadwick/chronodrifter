@@ -11,7 +11,8 @@ class Utils {
             "Please Pick Up After Yourself",
             "Timing",
             "Good Luck",
-            "Cause and Effect"
+            "Cause and Effect",
+            "Causes and Effects"
     };
 
     public static string formLevelName(int idx, int numNewLines, bool addLevelWord = false) {

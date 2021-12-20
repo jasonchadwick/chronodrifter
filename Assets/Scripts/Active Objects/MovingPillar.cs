@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
 class MovingPillar : ActivatedObject {
-    public float baseYScale;
-    public float activeYScale;
     public float moveTime;
+    public float moveLerp;
+    public float moveDistance;
     private Vector3 scaleAnchor;
     private float activeTime;
     private Vector3 activePos;
@@ -13,24 +13,14 @@ class MovingPillar : ActivatedObject {
     private Light2D activeLight;
 
     public override void ChildStart() {
-        activeTime = 0;
-        if (defaultActiveStatus) {
-            // TODO: when it starts, lerps from inactive to active based on activeTime.
-            // need to adjust activeTime to account for when it defaults to active.
-            activePos = transform.position;
-            inactivePos = activePos - Vector3.Project(transform.localScale, transform.up) * 15;
-        }
-        else {
-            inactivePos = transform.position;
-            activePos = inactivePos + Vector3.Project(transform.localScale, transform.up) * 15;
-            Debug.Log(inactivePos);
-            Debug.Log(activePos);
-        }
+        activeTime = 0.1f;
+        inactivePos = transform.position;
+        activePos = inactivePos + transform.up * moveDistance;
         activeLight = GetComponentInChildren<Light2D>();
     }
 
     public override void ChildFixedUpdate() {
-        if (activeTime > 0.01f) {
+        if ((transform.position - inactivePos).magnitude > 0.1f) {
             activeLight.intensity = 0.5f;
         }
         else {
@@ -40,21 +30,17 @@ class MovingPillar : ActivatedObject {
             if (!TimeEventManager.isReversed) {
                 if (IsActive()) {
                     if (activeTime < moveTime) {
-                        activeTime += Time.fixedDeltaTime;
-                        transform.position = Vector3.Lerp(inactivePos, activePos, activeTime / moveTime);
+                        transform.position = Vector3.Lerp(transform.position, activePos, moveLerp * Time.fixedDeltaTime);
                     }
                     else if (activeTime > moveTime) {
-                        activeTime = moveTime;
                         transform.position = activePos;
                     }
                 }
                 else {
                     if (activeTime > 0) {
-                        activeTime -= Time.fixedDeltaTime;
-                        transform.position = Vector3.Lerp(inactivePos, activePos, activeTime / moveTime);
+                        transform.position = Vector3.Lerp(transform.position, inactivePos, moveLerp * Time.fixedDeltaTime);
                     }
                     else if (activeTime < 0) {
-                        activeTime = 0;
                         transform.position = inactivePos;
                     }
                 }
