@@ -20,7 +20,7 @@ class MovingPillar : ActivatedObject {
     }
 
     public override void ChildFixedUpdate() {
-        if ((transform.position - inactivePos).magnitude > 0.1f) {
+        if ((transform.position - inactivePos).magnitude > 1.0f) {
             activeLight.intensity = 0.5f;
         }
         else {

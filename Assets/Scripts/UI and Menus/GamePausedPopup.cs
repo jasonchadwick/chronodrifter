@@ -7,6 +7,8 @@ class GamePausedPopup : MonoBehaviour {
     public Button resumeButton;
     public Button mainMenuButton;
     public Button restartButton;
+    public Button controlsButton;
+    public GameObject controlScreenPrefab;
     public GameObject pauseManager;
     private int sceneidx;
 
@@ -14,6 +16,7 @@ class GamePausedPopup : MonoBehaviour {
         resumeButton.onClick.AddListener(Resume);
         mainMenuButton.onClick.AddListener(LoadMainMenu);
         restartButton.onClick.AddListener(Restart);
+        controlsButton.onClick.AddListener(Controls);
     }
 
     void Resume() {
@@ -22,6 +25,10 @@ class GamePausedPopup : MonoBehaviour {
 
     void Restart() {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    void Controls() {
+        Instantiate(controlScreenPrefab);
     }
 
     void LoadMainMenu() {

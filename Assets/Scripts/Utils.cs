@@ -9,7 +9,7 @@ class Utils {
             "Floating",
             "Falling Upwards",
             "Please Pick Up After Yourself",
-            "Timing",
+            "Don't Touch the Red",
             "Good Luck",
             "Cause and Effect",
             "Causes and Effects"
