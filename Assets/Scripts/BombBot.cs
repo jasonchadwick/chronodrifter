@@ -9,7 +9,26 @@ using UnityEngine;
 
 class BombBot : Character {
     private GameObject target;
+    private Rigidbody2D rb2D;
 
+    public float rollForce;
+    public float explodeDistance;
+
+    void Start() {
+        rb2D = GetComponent<Rigidbody2D>();
+    }
+
+    void FixedUpdate() {
+        Vector3 direction = target.transform.position - transform.position;
+        // TODO: if player is visible, bright red light. else dim red light.
+        if (direction.magnitude < explodeDistance) {
+            Explode();
+        }
+        //rb2D.AddForce(direction, rollForce);
+        
+    }
+
+    // need to make animation happen as well
     void Explode() {
         if (target != null) {
             target.GetComponent<Character>().Kill();

@@ -9,13 +9,14 @@ public abstract class TimeReversibleObject : MonoBehaviour {
     private Stack<State> objectHistory;
     private State state;
     private State lastState;
+    private float maxStackSize;
     public float similarityThreshold = 5e-2f;
-    public float maxStackSize = 1; // one hour
+    public float maxHistorySeconds = 60*60; // one hour
 
     void Start() {
         objectHistory = new Stack<State>();
         ChildStart();
-        maxStackSize = 60*60/Time.fixedDeltaTime; // one hour
+        maxStackSize = maxHistorySeconds/Time.fixedDeltaTime; // one hour
     }
 
     void FixedUpdate() {

@@ -14,8 +14,18 @@ class MovingPillar : ActivatedObject {
 
     public override void ChildStart() {
         activeTime = 0;
-        inactivePos = transform.position;
-        activePos = inactivePos + Vector3.Project(transform.lossyScale, transform.up) * 15;
+        if (defaultActiveStatus) {
+            // TODO: when it starts, lerps from inactive to active based on activeTime.
+            // need to adjust activeTime to account for when it defaults to active.
+            activePos = transform.position;
+            inactivePos = activePos - Vector3.Project(transform.localScale, transform.up) * 15;
+        }
+        else {
+            inactivePos = transform.position;
+            activePos = inactivePos + Vector3.Project(transform.localScale, transform.up) * 15;
+            Debug.Log(inactivePos);
+            Debug.Log(activePos);
+        }
         activeLight = GetComponentInChildren<Light2D>();
     }
 
