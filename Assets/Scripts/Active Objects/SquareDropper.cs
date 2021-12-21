@@ -8,10 +8,8 @@ class SquareDropper : ActivatedObject {
     public float force;
     public float spawnInterval = 5.0f;
     public float fadeTime = 1.0f;
-    public float accelTime = 0.5f;
     
-    // currently not working
-    public float startDelay = 0;
+    public float startDelay;
     public float delay;
     public AudioSource dropSound;
     private DespawningSquare square;

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Control objects send signals to ActivatedObjects
-class ControlObject : MonoBehaviour {
+class ControlObject : TimeReversibleObject {
     public List<ActivatedObject> targets;
     public int signalStrength = 1;
     private bool isSendingSignal;

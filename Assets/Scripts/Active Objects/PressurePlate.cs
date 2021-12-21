@@ -2,28 +2,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-// TODO: make it work with general TimeReversibleObject framework instead of using its own stack
 class PressurePlate : ControlObject {
-    public float pressTime = 2.0f;
+    public float pressTime;
+    public float pressDistance;
     private Transform plateTransform;
     private float timePressed;
-    private float scaleY;
-    private float initX;
-    private float initY;
-    private float initZ;
+    private Vector3 initPos;
     private int pressingCount;
-    private Stack<float> yHistory;
-    private ActivatedObject targetComponent;
 
-    void Start() {
+    public override void ChildStart() {
         timePressed = 0;
         pressingCount = 0;
+
+        // want to move the plate, not the (invisible) collider box
         plateTransform = transform.GetChild(0);
-        scaleY = plateTransform.localScale.y;
-        initX = plateTransform.localPosition.x;
-        initY = plateTransform.localPosition.y;
-        initZ = plateTransform.localPosition.z;
-        yHistory = new Stack<float>();
+        initPos = plateTransform.localPosition;
     }
 
     void OnTriggerEnter2D(Collider2D obj) {
@@ -33,49 +26,47 @@ class PressurePlate : ControlObject {
         }
     }
 
-    /*void OnTriggerStay2D(Collider2D obj) {
-        if (obj.gameObject.layer != 6) {
-            pressingCount = true;
-            foreach (Light2D light in plateTransform.GetComponentsInChildren<Light2D>()) {
-                light.intensity = 1;
-            }
-        }
-    }*/
-
     void OnTriggerExit2D(Collider2D obj) {
         if (obj.gameObject.layer != 6) {
             pressingCount--;
             if (pressingCount == 0) {
                 Deactivate();
             }
-            foreach (Light2D light in plateTransform.GetComponentsInChildren<Light2D>()) {
-                light.intensity = 0;
+        }
+    }
+
+    public override void ChildFixedUpdate() {
+        if (!TimeEventManager.isPaused && !TimeEventManager.isReversed) {
+            plateTransform.localPosition = new Vector3(initPos.x, Mathf.Lerp(initPos.y, initPos.y - pressDistance, timePressed / pressTime), initPos.z);
+            if (pressingCount > 0 && timePressed < pressTime) {
+                timePressed += Time.fixedDeltaTime;
+            }
+            else if (pressingCount == 0 && timePressed > 0) {
+                timePressed -= Time.fixedDeltaTime;
             }
         }
     }
 
-    void FixedUpdate() {
-        if (!TimeEventManager.isPaused) {
-            if (!TimeEventManager.isReversed) {
-                plateTransform.localPosition = new Vector3(initX, Mathf.Lerp(initY, initY - scaleY, timePressed / pressTime), initZ);
-                yHistory.Push(plateTransform.localPosition.y);
-                if (pressingCount > 0 && timePressed < pressTime) {
-                    timePressed += Time.fixedDeltaTime;
-                }
-                else if (pressingCount == 0 && timePressed > 0) {
-                    timePressed -= Time.fixedDeltaTime;
-                }
-            }
-            else {
-                float curY;
-                if (yHistory.Count > 1) {
-                    curY = yHistory.Pop();
-                }
-                else {
-                    curY = yHistory.Peek();
-                }
-                plateTransform.localPosition = new Vector3(initX, curY, initZ);
-            }
-        }
+    public override State GetCurrentState() {
+        return new FloatState(plateTransform.localPosition.y);
+    }
+
+    public override void UpdateObjectState(State s) {
+        FloatState state = s as FloatState;
+        plateTransform.localPosition = new Vector3(initPos.x, state.f, initPos.z);
+    }
+
+    public override float GetStateDifference(State s1, State s2) {
+        FloatState state1 = s1 as FloatState;
+        FloatState state2 = s2 as FloatState;
+        return Mathf.Abs(state1.f - state2.f);
+    }
+}
+
+public class FloatState : State {
+    public float f;
+
+    public FloatState(float num) {
+        f = num;
     }
 }

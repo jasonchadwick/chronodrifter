@@ -58,7 +58,7 @@ public abstract class TimeReversibleObject : MonoBehaviour {
         ChildFixedUpdate();
     }
 
-    // The following functions must be implemented by each child class.
+    // The following functions can be implemented by each child class.
     public virtual State GetCurrentState() {return new State();}
     public virtual float GetStateDifference(State state1, State state2) {return 0.0f;}
     public virtual void UpdateObjectState(State s) {}

@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 5760147341534893043}
   - component: {fileID: 2908320350912280225}
   - component: {fileID: 1130256407429609147}
-  - component: {fileID: 6507493918017276564}
   m_Layer: 0
   m_Name: Elevator platform
   m_TagString: Untagged
@@ -46,6 +45,7 @@ SpriteRenderer:
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -158,17 +158,4 @@ MonoBehaviour:
   - {x: -1, y: 0.125, z: 0}
   m_ShapePathHash: -107612907
   m_Mesh: {fileID: 0}
-  m_InstanceId: 39888
---- !u!114 &6507493918017276564
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1289297675716193585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce043bf4910eb01a5aba1d8b6c301e1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isInFront: 1
+  m_InstanceId: 29372

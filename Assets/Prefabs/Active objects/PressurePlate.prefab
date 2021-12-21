@@ -213,9 +213,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3c085f812a50591a19a32d38f06059, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  similarityThreshold: 0.05
+  maxHistorySeconds: 3600
   targets: []
   signalStrength: 1
   pressTime: 0.1
+  pressDistance: 0.3
 --- !u!61 &7821382614675426119
 BoxCollider2D:
   m_ObjectHideFlags: 0
