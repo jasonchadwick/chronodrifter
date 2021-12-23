@@ -148,9 +148,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   similarityThreshold: 0.01
-  useHistoryStack: 1
+  maxHistorySeconds: 3600
   restoringForce: 1
-  restoringLerp: 15
+  restoringLerp: 25
 --- !u!114 &6472181411170540357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,7 +176,7 @@ MonoBehaviour:
   - {x: -0.2437867, y: 0.24889612, z: 0}
   m_ShapePathHash: 1101714981
   m_Mesh: {fileID: 0}
-  m_InstanceId: 98590
+  m_InstanceId: 32370
 --- !u!1 &2869722296901259985
 GameObject:
   m_ObjectHideFlags: 0
