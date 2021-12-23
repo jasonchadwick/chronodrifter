@@ -1,10 +1,16 @@
 ### classes and organization
 
 - TimeReversibleObject
-    - ActivatedObject (add field: isActive, add active status to history stack)
+    - ActivatedObject (add incomingSignalSum)
         - Elevator
         - SquareDropper
         - MovingPillar
         - (TODO) Door
         - (TODO) Portal
-    - 
+    - ControlObject (add targets, signal strength)
+        - PressurePlate
+    - TimeReversibleRigidbody
+        - DespawningSquare
+- Character
+    - BombBot
+- 
