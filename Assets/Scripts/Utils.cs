@@ -12,7 +12,8 @@ class Utils {
             "Don't Touch the Red",
             "Good Luck",
             "Hmm...",
-            "Cause and Effect"
+            "Cause and Effect",
+            "Making Friends"
     };
 
     public static string formLevelName(int idx, int numNewLines, bool addLevelWord = false) {

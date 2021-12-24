@@ -16,6 +16,8 @@ class SceneActions : MonoBehaviour {
     private GameObject pauseScreenObject;
     private bool paused;
     private bool loading;
+    private bool restarting;
+    private float timeSinceRestart = 0;
 
     void Start() {
         loading = true;
@@ -45,7 +47,14 @@ class SceneActions : MonoBehaviour {
                 entrancePortal.GetComponent<EntrancePortal>().Spawn();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Escape)) {
+        else if (restarting) {
+            timeSinceRestart += Time.deltaTime;
+            if (timeSinceRestart > 1) {
+                TimeEventManager.Reset();
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+        }
+        else if (Input.GetKeyDown(KeyCode.Escape)) {
             Pause();
         }
     }
@@ -62,5 +71,9 @@ class SceneActions : MonoBehaviour {
             pauseScreenObject = Instantiate(pauseScreen, Vector3.zero, Quaternion.identity);
             pauseScreenObject.GetComponent<GamePausedPopup>().pauseManager = gameObject;
         }
+    }
+
+    public void Restart() {
+        restarting = true;
     }
 }

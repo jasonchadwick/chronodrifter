@@ -6,9 +6,7 @@ class PlayerKillingMaterial : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D coll) {
         if (coll.gameObject.layer == 3) {
-            Destroy(coll.gameObject);
-            TimeEventManager.Reset();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            coll.gameObject.GetComponent<Player>().Kill();
         }
     }
 

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Play from start
   - Levels
+  - Environment
   layers:
   - Default
   - TransparentFX
