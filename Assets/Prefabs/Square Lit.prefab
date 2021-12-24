@@ -150,7 +150,7 @@ MonoBehaviour:
   similarityThreshold: 0.01
   maxHistorySeconds: 3600
   restoringForce: 1
-  restoringLerp: 25
+  restoringLerp: 30
 --- !u!114 &6472181411170540357
 MonoBehaviour:
   m_ObjectHideFlags: 0

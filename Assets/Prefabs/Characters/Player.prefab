@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 0
   m_LightVolumeIntensityEnabled: 0
-  m_ApplyToSortingLayers: 00000000977b20af
+  m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -333,7 +333,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   similarityThreshold: 0.05
-  maxHistorySeconds: 3600
   ghostPrefab: {fileID: 7151350628726681011, guid: 3af18139c512930128f49b4ce2d5b7ac, type: 3}
 --- !u!60 &8002691777048550063
 PolygonCollider2D:
@@ -360,10 +359,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.72, y: -0.75}
-      - {x: 0.72, y: -0.75}
-      - {x: 0.7, y: -0.775}
-      - {x: -0.7, y: -0.775}
+    - - {x: -0.71, y: -0.75}
+      - {x: 0.71, y: -0.75}
+      - {x: 0.71, y: -0.8}
+      - {x: -0.71, y: -0.8}
 --- !u!114 &8134107252536244483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -376,4 +375,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 216746def770ad444a3ad83b20c1c631, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  environment: {fileID: 0}

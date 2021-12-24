@@ -6,6 +6,10 @@ class MovingPillar : ActivatedObject {
     public float moveTime;
     public float moveLerp;
     public float moveDistance;
+    public bool crushing;
+    public bool crushOnActive;
+    public float crushDistance;
+    private BoxCollider2D crushCollider;
     private Vector3 activePos;
     private Vector3 inactivePos;
     private Light2D activeLight;
@@ -14,6 +18,9 @@ class MovingPillar : ActivatedObject {
         inactivePos = transform.position;
         activePos = inactivePos + transform.up * moveDistance;
         activeLight = GetComponentInChildren<Light2D>();
+        if (crushing) {
+            crushCollider = transform.Find("PlayerCrusher").GetComponent<BoxCollider2D>();
+        }
     }
 
     public override void ChildFixedUpdate() {
@@ -23,6 +30,24 @@ class MovingPillar : ActivatedObject {
         else {
             activeLight.intensity = 0;
         }
+
+        if (crushing) {
+            Vector3 crushPos;
+            if (crushOnActive) {
+                crushPos = activePos;
+            }
+            else {
+                crushPos = inactivePos;
+            }
+
+            if ((transform.position - crushPos).magnitude < crushDistance) {
+                crushCollider.enabled = true;
+            }
+            else {
+                crushCollider.enabled = false;
+            }
+        }
+
         if (!TimeEventManager.isPaused) {
             if (!TimeEventManager.isReversed) {
                 if (IsActive()) {

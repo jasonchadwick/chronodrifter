@@ -13,7 +13,8 @@ class Utils {
             "Good Luck",
             "Hmm...",
             "Cause and Effect",
-            "Making Friends"
+            "Making Friends",
+            "level11"
     };
 
     public static string formLevelName(int idx, int numNewLines, bool addLevelWord = false) {
