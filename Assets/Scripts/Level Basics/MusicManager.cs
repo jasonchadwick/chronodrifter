@@ -9,6 +9,7 @@ class MusicManager : MonoBehaviour {
     public float pausedPitch;
     public float pitchChangeDuration;
     public float startOffset;
+    public float volumeLevel;
     private bool fadingIn;
     public bool fadingOut;
     private bool isFirstLoad = true;
@@ -62,17 +63,17 @@ class MusicManager : MonoBehaviour {
     void Update() {
         if (fadingIn) {
             if (Time.timeSinceLevelLoad / Time.timeScale < 1) {
-                music.volume = Mathf.Lerp(oldVolume, 1, Time.timeSinceLevelLoad / Time.timeScale);
+                music.volume = Mathf.Lerp(oldVolume, volumeLevel, Time.timeSinceLevelLoad / Time.timeScale);
             }
             else {
-                music.volume = 1;
+                music.volume = volumeLevel;
                 fadingIn = false;
             }
         }
         if (fadingOut) {
             fadingOutTime += Time.deltaTime;
             if (fadingOutTime / Time.timeScale < 1) {
-                music.volume = Mathf.Lerp(1, 0.2f, fadingOutTime / Time.timeScale);
+                music.volume = Mathf.Lerp(volumeLevel, 0.2f, fadingOutTime / Time.timeScale);
             }
             else {
                 music.volume = 0.2f;

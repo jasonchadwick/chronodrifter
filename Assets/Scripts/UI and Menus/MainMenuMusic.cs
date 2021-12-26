@@ -4,6 +4,7 @@ using UnityEngine;
 class MainMenuMusic : MonoBehaviour {
     public AudioSource music;
     public float fadeInTime;
+    public float volume;
     private bool fadingIn = true;
 
     private static MainMenuMusic _instance;
@@ -35,10 +36,10 @@ class MainMenuMusic : MonoBehaviour {
     void Update() {
         if (fadingIn) {
             if (Time.time < fadeInTime) {
-                music.volume = Mathf.Lerp(0, 1, Time.time / fadeInTime);
+                music.volume = Mathf.Lerp(0, volume, Time.time / fadeInTime);
             }
             else {
-                music.volume = 1;
+                music.volume = volume;
                 fadingIn = false;
             }
         }

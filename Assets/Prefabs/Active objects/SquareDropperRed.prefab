@@ -93,7 +93,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1306551338907400573, guid: fcc70ca663a5597de977254e35bc4153, type: 3}
       propertyPath: m_InstanceId
-      value: -45700
+      value: -4840
+      objectReference: {fileID: 0}
+    - target: {fileID: 2312301932240122592, guid: fcc70ca663a5597de977254e35bc4153, type: 3}
+      propertyPath: m_Volume
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5528805080065334788, guid: fcc70ca663a5597de977254e35bc4153, type: 3}
       propertyPath: m_ForceVariation
