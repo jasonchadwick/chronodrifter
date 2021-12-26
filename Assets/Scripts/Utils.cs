@@ -10,7 +10,6 @@ class Utils {
             "Falling Upwards",
             "Please Pick Up After Yourself",
             "Don't Touch the Red",
-            "Good Luck",
             "Hmm...",
             "Cause and Effect",
             "Making Friends",

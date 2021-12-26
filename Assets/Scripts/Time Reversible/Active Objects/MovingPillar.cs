@@ -48,23 +48,21 @@ class MovingPillar : ActivatedObject {
             }
         }
 
-        if (!TimeEventManager.isPaused) {
-            if (!TimeEventManager.isReversed) {
-                if (IsActive()) {
-                    if ((transform.position - activePos).magnitude > 0.05f) {
-                        transform.position = Vector3.Lerp(transform.position, activePos, moveLerp * Time.fixedDeltaTime);
-                    }
-                    else {
-                        transform.position = activePos;
-                    }
+        if (!TimeEventManager.isReversed) {
+            if (IsActive()) {
+                if ((transform.position - activePos).magnitude > 0.05f) {
+                    transform.position = Vector3.Lerp(transform.position, activePos, moveLerp * Time.fixedDeltaTime / TimeEventManager.curSlowFactor);
                 }
                 else {
-                    if ((transform.position - inactivePos).magnitude > 0.05f) {
-                        transform.position = Vector3.Lerp(transform.position, inactivePos, moveLerp * Time.fixedDeltaTime);
-                    }
-                    else {
-                        transform.position = inactivePos;
-                    }
+                    transform.position = activePos;
+                }
+            }
+            else {
+                if ((transform.position - inactivePos).magnitude > 0.05f) {
+                    transform.position = Vector3.Lerp(transform.position, inactivePos, moveLerp * Time.fixedDeltaTime / TimeEventManager.curSlowFactor);
+                }
+                else {
+                    transform.position = inactivePos;
                 }
             }
         }
@@ -85,6 +83,12 @@ class MovingPillar : ActivatedObject {
     {
         PillarState state = s as PillarState;
         transform.position = state.pos;
+    }
+
+    public override State StateLerp(State s1, State s2, float f) {
+        PillarState state1 = s1 as PillarState;
+        PillarState state2 = s2 as PillarState;
+        return new PillarState(Vector3.Lerp(state1.pos, state2.pos, f));
     }
 }
 

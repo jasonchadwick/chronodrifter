@@ -160,7 +160,7 @@ MonoBehaviour:
   - {x: -0.2437867, y: 0.24889612, z: 0}
   m_ShapePathHash: 1101714981
   m_Mesh: {fileID: 0}
-  m_InstanceId: 39084
+  m_InstanceId: 138594
 --- !u!114 &308165885255895567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,7 +174,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   similarityThreshold: 0.01
-  maxHistorySeconds: 60
   restoringForce: 1
   restoringLerp: 20
   elapsedLifetime: 0

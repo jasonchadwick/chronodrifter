@@ -51,7 +51,7 @@ public class DespawningSquare : TimeReversibleRigidbody {
 
     public override State GetCurrentState()
     {
-        return new DespawningSquareState(transform, rb2D, rendererObject.color, squareLight.intensity, elapsedLifetime, shadows.enabled);
+        return new DespawningSquareState(transform.position, transform.eulerAngles.z, rb2D.velocity, rb2D.angularVelocity, rendererObject.color, squareLight.intensity, elapsedLifetime, shadows.enabled);
     }
 
     // GetStateDifference same as parent
@@ -59,16 +59,17 @@ public class DespawningSquare : TimeReversibleRigidbody {
     public override void UpdateObjectState(State s)
     {
         base.UpdateObjectState(s);
-        DespawningSquareState state = (DespawningSquareState) s;
+        DespawningSquareState state = s as DespawningSquareState;
         rendererObject.color = state.color;
         squareLight.intensity = state.intensity;
         elapsedLifetime = state.lifetime;
+        boxCollider.enabled = state.shadowsEnabled;
         shadows.enabled = state.shadowsEnabled;
     }
 
     public override void ChildFixedUpdate() {
-        if (!TimeEventManager.isPaused && !TimeEventManager.isReversed) {
-            elapsedLifetime += Time.fixedDeltaTime;
+        if (!TimeEventManager.isReversed) {
+            elapsedLifetime += Time.fixedDeltaTime / TimeEventManager.curSlowFactor;
             if (lifetime - elapsedLifetime <= fadeTime && elapsedLifetime < lifetime) {
                 float lerp = 1 - (lifetime - elapsedLifetime) / fadeTime;
                 rendererObject.color = Color.Lerp(spawnColor, endColor, lerp);
@@ -82,6 +83,44 @@ public class DespawningSquare : TimeReversibleRigidbody {
             }
         }
     }
+
+    public override float GetStateDifference(State s1, State s2) {
+        DespawningSquareState state1 = s1 as DespawningSquareState;
+        DespawningSquareState state2 = s2 as DespawningSquareState;
+
+        return base.GetStateDifference(s1, s2) + 
+               Mathf.Pow(Mathf.Abs(state1.lifetime - state2.lifetime), 4);
+    }
+
+    public override State StateLerp(State s1, State s2, float f)
+    {
+        Rigidbody2DState rb2Dlerp = base.StateLerp(s1, s2, f) as Rigidbody2DState;
+
+        DespawningSquareState state1 = s1 as DespawningSquareState;
+        DespawningSquareState state2 = s2 as DespawningSquareState;
+
+        Color newC = Color.Lerp(state1.color, state2.color, f);
+        float newI = Mathf.Lerp(state1.intensity, state2.intensity, f);
+        float newL = Mathf.Lerp(state1.lifetime, state2.lifetime, f);
+        bool newS = f < 0.5 ? state1.shadowsEnabled : state2.shadowsEnabled;
+
+        return new DespawningSquareState(rb2Dlerp.position, rb2Dlerp.angle, rb2Dlerp.velocity, rb2Dlerp.angularVelocity,
+                                         newC, newI, newL, newS);
+    }
+
+    public override State SlowDownState(State s)
+    {
+        DespawningSquareState state = s as DespawningSquareState;
+        Rigidbody2DState s1 = base.SlowDownState(s) as Rigidbody2DState;
+        return new DespawningSquareState(s1.position, s1.angle, s1.velocity, s1.angularVelocity, state.color, state.intensity, state.lifetime, state.shadowsEnabled);
+    }
+
+    public override State SpeedUpState(State s)
+    {
+        DespawningSquareState state = s as DespawningSquareState;
+        Rigidbody2DState s1 = base.SpeedUpState(s) as Rigidbody2DState;
+        return new DespawningSquareState(s1.position, s1.angle, s1.velocity, s1.angularVelocity, state.color, state.intensity, state.lifetime, state.shadowsEnabled);
+    }
 }
 
 public class DespawningSquareState : Rigidbody2DState {
@@ -90,7 +129,7 @@ public class DespawningSquareState : Rigidbody2DState {
     public float lifetime;
     public bool shadowsEnabled;
 
-    public DespawningSquareState(Transform transform, Rigidbody2D rb, Color c, float i, float lt, bool s) : base(transform, rb) {
+    public DespawningSquareState(Vector2 pos, float a, Vector2 v, float w, Color c, float i, float lt, bool s) : base(pos, a, v, w) {
         color = c;
         intensity = i;
         lifetime = lt;

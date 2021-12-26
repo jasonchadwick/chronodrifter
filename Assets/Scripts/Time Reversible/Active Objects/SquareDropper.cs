@@ -18,13 +18,15 @@ class SquareDropper : ActivatedObject {
 
     public override void ChildStart() {
         GetComponentInChildren<AreaEffector2D>().forceMagnitude = force;
+
+        TimeEventManager.OnPause += UpdateOnPause;
     }
 
     public override void ChildFixedUpdate() {
-        if (IsActive() && !TimeEventManager.isPaused) {
+        if (IsActive()) {
             if (!TimeEventManager.isReversed) {
                 if (!hasSpawnedSquare) {
-                    forwardTimeSinceLevelLoad += Time.fixedDeltaTime;
+                    forwardTimeSinceLevelLoad += Time.fixedDeltaTime / TimeEventManager.curSlowFactor;
 
                     if (forwardTimeSinceLevelLoad > startDelay) {
                         dropSound.Play();
@@ -40,7 +42,18 @@ class SquareDropper : ActivatedObject {
                 }
             }
             else if (!hasSpawnedSquare) {
-                forwardTimeSinceLevelLoad -= Time.fixedDeltaTime;
+                forwardTimeSinceLevelLoad -= Time.fixedDeltaTime / TimeEventManager.curSlowFactor;
+            }
+        }
+    }
+
+    void UpdateOnPause() {
+        if (!float.IsPositiveInfinity(TimeEventManager.slowFactor)) {
+            if (TimeEventManager.isPaused) {
+                GetComponentInChildren<AreaEffector2D>().forceMagnitude /= TimeEventManager.slowFactor;
+            }
+            else {
+                GetComponentInChildren<AreaEffector2D>().forceMagnitude *= TimeEventManager.slowFactor;
             }
         }
     }

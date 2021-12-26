@@ -36,13 +36,13 @@ class PressurePlate : ControlObject {
     }
 
     public override void ChildFixedUpdate() {
-        if (!TimeEventManager.isPaused && !TimeEventManager.isReversed) {
+        if (!TimeEventManager.isReversed) {
             plateTransform.localPosition = new Vector3(initPos.x, Mathf.Lerp(initPos.y, initPos.y - pressDistance, timePressed / pressTime), initPos.z);
             if (pressingCount > 0 && timePressed < pressTime) {
-                timePressed += Time.fixedDeltaTime;
+                timePressed += Time.fixedDeltaTime / TimeEventManager.curSlowFactor;
             }
             else if (pressingCount == 0 && timePressed > 0) {
-                timePressed -= Time.fixedDeltaTime;
+                timePressed -= Time.fixedDeltaTime / TimeEventManager.curSlowFactor;
             }
         }
     }

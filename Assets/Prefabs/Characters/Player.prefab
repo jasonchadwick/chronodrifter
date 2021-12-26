@@ -272,7 +272,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpStrength: 14
-  walkStrength: 45
+  walkStrength: 40
   maxHorizontalVelocity: 9
   selfRightingLerp: 10
   horizontalDampingLerp: 10

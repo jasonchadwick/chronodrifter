@@ -8,16 +8,19 @@ class Elevator : ActivatedObject {
     public float fadeDistance = 0.5f;
     public float topOffset;
     public float botOffset;
+    private float initVelocity;
     private Color defaultColor = Color.white;
     private Color fadeColor;
 
     public override void ChildStart() {
+        TimeEventManager.OnPause += UpdateOnPause;
         TimeEventManager.OnReverse += Reverse;
         fadeColor = new Color(1, 1, 1, 0);
+        initVelocity = velocity;
     }
 
     public override void ChildFixedUpdate() {
-        if (!TimeEventManager.isPaused && IsActive()) {
+        if (IsActive()) {
             foreach (Transform childTransform in transform) {
                 GameObject child = childTransform.gameObject;
                 SpriteRenderer srender = child.GetComponent<SpriteRenderer>();
@@ -44,6 +47,25 @@ class Elevator : ActivatedObject {
                     srender.color = defaultColor;
                 }
                 childTransform.position += Vector3.up * velocity * Time.fixedDeltaTime;
+            }
+        }
+    }
+
+    void UpdateOnPause() {
+        if (float.IsPositiveInfinity(TimeEventManager.slowFactor)) {
+            if (TimeEventManager.isPaused) {
+                velocity = 0;
+            }
+            else {
+                velocity = initVelocity;
+            }
+        }
+        else {
+            if (TimeEventManager.isPaused) {
+                velocity /= TimeEventManager.slowFactor;
+            }
+            else {
+                velocity *= TimeEventManager.slowFactor;
             }
         }
     }

@@ -11,19 +11,19 @@ class TimeGhost : TimeReversibleObject {
     }
 
     void OnPause() {
-        if (TimeEventManager.isPaused && TimeEventManager.isReversed && ghost == null) {
+        if (TimeEventManager.isReversed && ghost == null) {
             ghost = Instantiate(ghostPrefab, transform.position, transform.rotation);
         }
-        else {
+        else if (!TimeEventManager.isReversed) {
             Destroy(ghost);
         }
     }
 
     void OnReverse() {
-        if (TimeEventManager.isReversed && !TimeEventManager.isPaused && ghost == null) {
+        if (TimeEventManager.isReversed && ghost == null) {
             ghost = Instantiate(ghostPrefab, transform.position, transform.rotation);
         }
-        else {
+        else if (!TimeEventManager.isReversed) {
             Destroy(ghost);
         }
     }
@@ -53,9 +53,10 @@ class TimeGhost : TimeReversibleObject {
         Destroy(ghost);
     }
 
-    public override void OnStackEmpty()
-    {
-        Destroy(ghost);
+    public override State StateLerp(State s1, State s2, float f) {
+        PositionState state1 = s1 as PositionState;
+        PositionState state2 = s2 as PositionState;
+        return new PositionState(Vector2.Lerp(state1.position, state2.position, f));
     }
 }
 
