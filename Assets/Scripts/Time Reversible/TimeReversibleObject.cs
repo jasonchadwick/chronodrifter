@@ -94,7 +94,7 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                             OnStackEmpty();
                         }
                     }
-                    Debug.Log(GetStateDifference(prevState, nextState));
+                    
                     if (GetStateDifference(prevState, nextState) < 20) {
                         state = StateLerp(prevState, nextState, (float) (timeStepProgress) / timeStepsPerState);
                     }
