@@ -52,6 +52,7 @@ class MusicManager : MonoBehaviour {
             music.time = startOffset;
             music.volume = 0;
             reversedMusic.Pause();
+            reversedMusic.volume = volumeLevel;
             oldVolume = music.volume;
             isFirstLoad = false;
         }

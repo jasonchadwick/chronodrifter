@@ -24,6 +24,7 @@ class GamePausedPopup : MonoBehaviour {
     }
 
     void Restart() {
+        TimeEventManager.Reset();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

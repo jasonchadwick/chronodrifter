@@ -27,22 +27,24 @@ class TimeEventManager : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.R)) {
-            isReversed = !isReversed;
-            if (OnReverse != null) {
-                OnReverse();
+        if (Time.timeSinceLevelLoad > 1) {
+            if (Input.GetKeyDown(KeyCode.R)) {
+                isReversed = !isReversed;
+                if (OnReverse != null) {
+                    OnReverse();
+                }
             }
-        }
-        if (Input.GetKeyDown(KeyCode.F)) {
-            isPaused = !isPaused;
-            if (isPaused) {
-                curSlowFactor = slowFactor;
-            }
-            else {
-                curSlowFactor = 1;
-            }
-            if (OnPause != null) {
-                OnPause();
+            if (Input.GetKeyDown(KeyCode.F)) {
+                isPaused = !isPaused;
+                if (isPaused) {
+                    curSlowFactor = slowFactor;
+                }
+                else {
+                    curSlowFactor = 1;
+                }
+                if (OnPause != null) {
+                    OnPause();
+                }
             }
         }
     }

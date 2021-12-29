@@ -18,7 +18,6 @@ class SquareDropper : ActivatedObject {
 
     public override void ChildStart() {
         GetComponentInChildren<AreaEffector2D>().forceMagnitude = force;
-
         TimeEventManager.OnPause += UpdateOnPause;
     }
 
