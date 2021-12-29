@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class TimeReversibleObject : MonoBehaviour {
     // stack of previous states.
-    private Stack<State> objectHistory;
+    private State[] objectHistory;
     private State state;
     private State prevState;
 
@@ -17,14 +17,15 @@ public abstract class TimeReversibleObject : MonoBehaviour {
     private int tmpStepProgress;
     private int tmpSteps;
     
-    private float maxStackSize;
+    private int lastStateIdx = -1;
+    private int maxStackSize;
     public float similarityThreshold = 5e-2f;
     private float maxHistorySeconds = 5*60; // five minutes
 
     void Start() {
-        objectHistory = new Stack<State>();
+        maxStackSize = (int) Mathf.Round(maxHistorySeconds/Time.fixedDeltaTime);
+        objectHistory = new State[maxStackSize];
         ChildStart();
-        maxStackSize = maxHistorySeconds/Time.fixedDeltaTime;
 
         TimeEventManager.OnPause += UpdateOnPause;
         TimeEventManager.OnReverse += UpdateOnReverse;
@@ -42,15 +43,15 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                     if (tmpStepProgress == 0) {
                         state = prevState;
                         timeStepProgress = timeStepsPerState-1;
-                        if (objectHistory.Count > 1) {
-                            prevState = objectHistory.Peek();
+                        if (lastStateIdx > 0) {
+                            prevState = objectHistory[lastStateIdx];
                             if (prevState.numIntervals <= 1) {
-                                objectHistory.Pop();
+                                lastStateIdx--;
                             }
                             prevState.numIntervals--;
                         }
-                        else if (objectHistory.Count == 1) {
-                            prevState = objectHistory.Peek();
+                        else if (lastStateIdx == 0) {
+                            prevState = objectHistory[lastStateIdx];
                             OnStackSize1(prevState);
                             prevState.numIntervals--;
                         }
@@ -78,15 +79,15 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                     if (timeStepProgress == timeStepsPerState-1) {
                         nextState = prevState;
 
-                        if (objectHistory.Count > 1) {
-                            prevState = objectHistory.Peek();
+                        if (lastStateIdx > 0) {
+                            prevState = objectHistory[lastStateIdx];
                             if (prevState.numIntervals <= 1) {
-                                objectHistory.Pop();
+                                lastStateIdx--;
                             }
                             prevState.numIntervals--;
                         }
-                        else if (objectHistory.Count == 1) {
-                            prevState = objectHistory.Peek();
+                        else if (lastStateIdx == 0) {
+                            prevState = objectHistory[lastStateIdx];
                             OnStackSize1(prevState);
                             prevState.numIntervals--;
                         }
@@ -115,24 +116,26 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                 UpdateObjectState(state);
             }
             else {
-                if (objectHistory.Count < maxStackSize && timeStepProgress == timeStepsPerState-1) {
+                if (timeStepProgress == timeStepsPerState-1) {
                     state = GetCurrentState();
 
                     if (TimeEventManager.isPaused) {
                         state = SpeedUpState(state);
                     }
-                    if (objectHistory.Count > 0) {
-                        State s = objectHistory.Peek();
+                    if (lastStateIdx >= 0) {
+                        State s = objectHistory[lastStateIdx];
                         if (GetStateDifference(state, s) < similarityThreshold) {
                             s.numIntervals++;
                             state = s;
                         }
-                        else {
-                            objectHistory.Push(state);
+                        else if (lastStateIdx < maxStackSize - 1) {
+                            lastStateIdx++;
+                            objectHistory[lastStateIdx] = state;
                         }
                     }
-                    else {
-                        objectHistory.Push(state);
+                    else if (lastStateIdx < maxStackSize - 1) {
+                        lastStateIdx++;
+                        objectHistory[lastStateIdx] = state;
                     }
                     nextState = prevState = state;
                 }

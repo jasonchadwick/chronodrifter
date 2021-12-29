@@ -15,7 +15,7 @@ class PlayerMovement : MonoBehaviour {
         Physics2D.queriesHitTriggers = false;
     }
 
-    void Update() {
+    void FixedUpdate() {
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, 0, Vector3.Dot(transform.up, Vector3.up)), selfRightingLerp*Time.deltaTime);
 
         if ((Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow)) && (numGroundContacts > 0) && rb2D.velocity.y < jumpStrength/5) {
@@ -27,9 +27,7 @@ class PlayerMovement : MonoBehaviour {
         else if ((Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) && rb2D.velocity.x < maxHorizontalVelocity) {
             rb2D.AddForce(new Vector2(walkStrength, 0));
         }
-    }
-
-    void FixedUpdate() {
+        
         if (!(Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow)) && !(Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))) {
             rb2D.velocity = Vector2.Lerp(rb2D.velocity, new Vector2(0, rb2D.velocity.y), horizontalDampingLerp * Time.fixedDeltaTime);
         }

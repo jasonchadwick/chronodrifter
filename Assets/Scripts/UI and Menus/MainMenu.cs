@@ -24,8 +24,6 @@ class MainMenu : MonoBehaviour {
         titleTransform = title.transform;
         titleStart = titleTransform.position;
         timeSincePush = accInterval;
-
-        Application.targetFrameRate = 60;
     }
 
     void FixedUpdate() {

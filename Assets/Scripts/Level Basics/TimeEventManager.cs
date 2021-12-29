@@ -24,10 +24,12 @@ class TimeEventManager : MonoBehaviour {
         isReversed = false;
         Time.timeScale = 1.0f;
         curSlowFactor = 1;
+        Time.fixedDeltaTime = 0.03f;
+        Application.targetFrameRate = 60;
     }
 
     void Update() {
-        if (Time.timeSinceLevelLoad > 1) {
+        if (Time.timeSinceLevelLoad > 0.5f) {
             if (Input.GetKeyDown(KeyCode.R)) {
                 isReversed = !isReversed;
                 if (OnReverse != null) {
