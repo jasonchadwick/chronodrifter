@@ -2,7 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-// an object with a distinct lifetime
+/* A square with a distinct lifetime.
+   Can be respawned by calling Respawn().
+*/
+
 public class DespawningSquare : TimeReversibleObject<DespawningSquareState> {
     // from TimeReversibleRigidbody
     protected Rigidbody2D rb2D;

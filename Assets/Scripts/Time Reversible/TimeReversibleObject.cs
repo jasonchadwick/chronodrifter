@@ -1,8 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// General class for a time reversible object. Maintains a stack of previous
-// states. Forward time adds new states to the stack, and reverse pops them.
+/* General class for a time reversible object. Maintains a stack of previous
+   states. Forward time adds new states to the stack, and reverse pops them.
+
+    StateType is a child-defined state that holds all information necessary
+    for recreating a past object state. See States.cs for more info and
+    examples.
+*/
 
 public abstract class TimeReversibleObject<StateType> : MonoBehaviour {
     // stack of previous states.
@@ -20,11 +25,7 @@ public abstract class TimeReversibleObject<StateType> : MonoBehaviour {
     private int lastStateIdx = -1;
     private int maxStackSize;
     public float similarityThreshold = 5e-2f;
-    private float maxHistorySeconds = 60*60; // five minutes
-
-    // does not allocate enough space. Need to define the array in the inheriting class
-    // need InitArray() function
-    // should have no explicit references to the array in this class
+    private float maxHistorySeconds = 60*60; // one hour
 
     void Start() {
         maxStackSize = (int) Mathf.Round(maxHistorySeconds/Time.fixedDeltaTime);

@@ -4,7 +4,7 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 // child classes of TimeReversibleObject will use a specific State structure.
 public interface State {
-    // Number of FixedUpdate iterations for which the object has been in this State.
+    // Number of FixedUpdate iters for which the object has been in this State.
     int numIntervals {
         get;
         set;

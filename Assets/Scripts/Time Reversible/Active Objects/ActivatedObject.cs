@@ -1,8 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// An object that is either active or inactive based on how many
-// control objects are currently activating it.
+/* An object that is either active or inactive based on how many
+   control objects are currently activating it.
+   Can default to either active or inactive.
+*/
+
 class ActivatedObject<T> : TimeReversibleObject<T> {
     public int incomingSignalSum = 0;
     public int activationThreshold = 1;

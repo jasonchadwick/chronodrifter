@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// rolls towards player once spotted
-// when spotted: light narrows, points towards player
-// animation: when dormant, grey. when active, red
+/* Rolls towards player once spotted, then explodes.
+*/
 
 class BombBot : Character {
     private GameObject target;

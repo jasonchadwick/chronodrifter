@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/* The time ghost that is visible when time is reversed, showing previous
+   actions of the player. 
+*/
+
 class TimeGhost : TimeReversibleObject<PositionState> {
     public GameObject ghostPrefab;
     private GameObject ghost;

@@ -1,7 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Control objects send signals to ActivatedObjects
+/* General class for a control object such as a button.
+   Control objects send signals to ActivatedObjects.
+   Signal strength can be adjusted.
+*/
+
 class ControlObject<T> : TimeReversibleObject<T> {
     public List<Object> targets;
     private List<ActivatedObject<DefaultState>> defaultTargets;
@@ -51,7 +55,4 @@ class ControlObject<T> : TimeReversibleObject<T> {
             isSendingSignal = false;
         }
     }
-
-    public virtual void OnActivate() {}
-    public virtual void OnDeactivate() {}
 }

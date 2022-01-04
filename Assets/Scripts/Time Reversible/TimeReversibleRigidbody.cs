@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
+/* A physics object such as a square.
+*/
+
 public class TimeReversibleRigidbody : TimeReversibleObject<Rigidbody2DState> {
     protected Rigidbody2D rb2D;
     private bool isKinematic;

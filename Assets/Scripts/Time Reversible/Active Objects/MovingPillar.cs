@@ -2,6 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
+/* Pillar velocity is currently not saved, and it instead lerps to
+   its goal position. Could change this in the future.
+*/
+
 class MovingPillar : ActivatedObject<PositionState> {
     public float moveTime;
     public float moveLerp;
