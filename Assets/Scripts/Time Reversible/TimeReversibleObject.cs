@@ -4,14 +4,14 @@ using UnityEngine;
 // General class for a time reversible object. Maintains a stack of previous
 // states. Forward time adds new states to the stack, and reverse pops them.
 
-public abstract class TimeReversibleObject : MonoBehaviour {
+public abstract class TimeReversibleObject<StateType> : MonoBehaviour {
     // stack of previous states.
-    private State[] objectHistory;
-    private State state;
-    private State prevState;
+    private ObjectHistoryArray<StateType> objectHistory;
+    private StateType state;
+    private StateType prevState;
 
     // for use with slowed time
-    private State nextState;
+    private StateType nextState;
     private int timeStepProgress;
     private int timeStepsPerState = 1;
     private int tmpStepProgress;
@@ -20,11 +20,15 @@ public abstract class TimeReversibleObject : MonoBehaviour {
     private int lastStateIdx = -1;
     private int maxStackSize;
     public float similarityThreshold = 5e-2f;
-    private float maxHistorySeconds = 5*60; // five minutes
+    private float maxHistorySeconds = 60*60; // five minutes
+
+    // does not allocate enough space. Need to define the array in the inheriting class
+    // need InitArray() function
+    // should have no explicit references to the array in this class
 
     void Start() {
         maxStackSize = (int) Mathf.Round(maxHistorySeconds/Time.fixedDeltaTime);
-        objectHistory = new State[maxStackSize];
+        objectHistory = new ObjectHistoryArray<StateType>(maxStackSize);
         ChildStart();
 
         TimeEventManager.OnPause += UpdateOnPause;
@@ -44,16 +48,16 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                         state = prevState;
                         timeStepProgress = timeStepsPerState-1;
                         if (lastStateIdx > 0) {
-                            prevState = objectHistory[lastStateIdx];
-                            if (prevState.numIntervals <= 1) {
+                            prevState = objectHistory.Get(lastStateIdx);
+                            if (((State) prevState).numIntervals <= 1) {
                                 lastStateIdx--;
                             }
-                            prevState.numIntervals--;
+                            objectHistory.Dec(lastStateIdx);
                         }
                         else if (lastStateIdx == 0) {
-                            prevState = objectHistory[lastStateIdx];
+                            prevState = objectHistory.Get(lastStateIdx);
                             OnStackSize1(prevState);
-                            prevState.numIntervals--;
+                            objectHistory.Dec(lastStateIdx);
                         }
                         else {
                             OnStackEmpty();
@@ -80,16 +84,16 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                         nextState = prevState;
 
                         if (lastStateIdx > 0) {
-                            prevState = objectHistory[lastStateIdx];
-                            if (prevState.numIntervals <= 1) {
+                            prevState = objectHistory.Get(lastStateIdx);
+                            if (((State) prevState).numIntervals <= 1) {
                                 lastStateIdx--;
                             }
-                            prevState.numIntervals--;
+                            objectHistory.Dec(lastStateIdx);
                         }
                         else if (lastStateIdx == 0) {
-                            prevState = objectHistory[lastStateIdx];
+                            prevState = objectHistory.Get(lastStateIdx);
                             OnStackSize1(prevState);
-                            prevState.numIntervals--;
+                            objectHistory.Dec(lastStateIdx);
                         }
                         else {
                             OnStackEmpty();
@@ -123,19 +127,19 @@ public abstract class TimeReversibleObject : MonoBehaviour {
                         state = SpeedUpState(state);
                     }
                     if (lastStateIdx >= 0) {
-                        State s = objectHistory[lastStateIdx];
+                        StateType s = objectHistory.Get(lastStateIdx);
                         if (GetStateDifference(state, s) < similarityThreshold) {
-                            s.numIntervals++;
+                            objectHistory.Inc(lastStateIdx);
                             state = s;
                         }
                         else if (lastStateIdx < maxStackSize - 1) {
                             lastStateIdx++;
-                            objectHistory[lastStateIdx] = state;
+                            objectHistory.Set(lastStateIdx, state);
                         }
                     }
                     else if (lastStateIdx < maxStackSize - 1) {
                         lastStateIdx++;
-                        objectHistory[lastStateIdx] = state;
+                        objectHistory.Set(lastStateIdx, state);
                     }
                     nextState = prevState = state;
                 }
@@ -169,20 +173,46 @@ public abstract class TimeReversibleObject : MonoBehaviour {
     }
 
     // The following functions can be implemented by each child class.
-    public virtual State GetCurrentState() {return new State();}
-    public virtual float GetStateDifference(State state1, State state2) {return 0.0f;}
-    public virtual void UpdateObjectState(State s) {}
-    public virtual void OnStackSize1(State s) {}
+    public virtual StateType GetCurrentState() {return default(StateType);}
+    public virtual float GetStateDifference(StateType state1, StateType state2) {return 0.0f;}
+    public virtual void UpdateObjectState(StateType s) {}
+    public virtual void OnStackSize1(StateType s) {}
     public virtual void OnStackEmpty() {}
     public virtual void ChildStart() {}
     public virtual void ChildFixedUpdate() {}
-    public virtual State StateLerp(State state1, State state2, float f) {return state2;}
-    public virtual State SlowDownState(State state) {return state;}
-    public virtual State SpeedUpState(State state) {return state;}
+    public virtual StateType StateLerp(StateType state1, StateType state2, float f) {return state2;}
+    public virtual StateType SlowDownState(StateType state) {return state;}
+    public virtual StateType SpeedUpState(StateType state) {return state;}
 }
 
-// child classes of TimeReversibleObject will implement a specific State class.
-public class State : Object {
-    // Number of FixedUpdate iterations for which the object has been in this State.
-    public int numIntervals = 1;
+public class ObjectHistoryArray<T> {
+    private T[] array;
+
+
+    public ObjectHistoryArray(int size) {
+        array = new T[size];
+    }
+
+    public T Get(int idx) {
+        return array[idx];
+    }
+
+    public void Set(int idx, T val) {
+        array[idx] = val;
+    }
+
+    public void Inc(int idx) {
+        State state = (State) (array[idx]);
+        if (state != null) {
+            state.Increment();
+            array[idx] = (T) state;
+        }
+        
+    }
+
+    public void Dec(int idx) {
+        State s = (State) array[idx];
+        s.Decrement();
+        array[idx] = (T) s;
+    }
 }

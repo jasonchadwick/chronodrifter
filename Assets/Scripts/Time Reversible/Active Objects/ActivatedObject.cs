@@ -3,7 +3,7 @@ using UnityEngine;
 
 // An object that is either active or inactive based on how many
 // control objects are currently activating it.
-class ActivatedObject : TimeReversibleObject {
+class ActivatedObject<T> : TimeReversibleObject<T> {
     public int incomingSignalSum = 0;
     public int activationThreshold = 1;
     public bool defaultActiveStatus = false;
@@ -31,4 +31,9 @@ class ActivatedObject : TimeReversibleObject {
 
     public virtual void Activate() {}
     public virtual void Deactivate() {}
+}
+
+interface ActivatedObject1 {
+    public void ApplySignal(int signalStrength);
+    public bool IsActive();
 }

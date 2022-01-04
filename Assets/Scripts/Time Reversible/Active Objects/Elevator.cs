@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-class Elevator : ActivatedObject {
+class Elevator : ActivatedObject<DefaultState> {
     public GameObject platformPrefab;
     public float velocity = 1.0f;
     public float fadeDistance = 0.5f;

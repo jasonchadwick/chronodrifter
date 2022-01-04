@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
 //TODO: give dropper an "acceleration field" inside of it
-class SquareDropper : ActivatedObject {
+class SquareDropper : ActivatedObject<DefaultState> {
     public DespawningSquare squarePrefab;
     public float force;
     public float spawnInterval = 5.0f;

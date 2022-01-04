@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-class MovingPillar : ActivatedObject {
+class MovingPillar : ActivatedObject<PositionState> {
     public float moveTime;
     public float moveLerp;
     public float moveDistance;
@@ -68,34 +68,21 @@ class MovingPillar : ActivatedObject {
         }
     }
 
-    public override State GetCurrentState() {
-        return new PillarState(transform.position);
+    public override PositionState GetCurrentState() {
+        return new PositionState(transform.position);
     }
 
-    public override float GetStateDifference(State s1, State s2)
+    public override float GetStateDifference(PositionState state1, PositionState state2)
     {
-        PillarState state1 = s1 as PillarState;
-        PillarState state2 = s2 as PillarState;
-        return (state1.pos - state2.pos).magnitude;
+        return (state1.position - state2.position).magnitude;
     }
 
-    public override void UpdateObjectState(State s)
+    public override void UpdateObjectState(PositionState state)
     {
-        PillarState state = s as PillarState;
-        transform.position = state.pos;
+        transform.position = state.position;
     }
 
-    public override State StateLerp(State s1, State s2, float f) {
-        PillarState state1 = s1 as PillarState;
-        PillarState state2 = s2 as PillarState;
-        return new PillarState(Vector3.Lerp(state1.pos, state2.pos, f));
-    }
-}
-
-class PillarState : State {
-    public Vector3 pos;
-
-    public PillarState(Vector3 p) {
-        pos = p;
+    public override PositionState StateLerp(PositionState state1, PositionState state2, float f) {
+        return new PositionState(Vector3.Lerp(state1.position, state2.position, f));
     }
 }

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-class PressurePlate : ControlObject {
+class PressurePlate : ControlObject<FloatState> {
     public float pressTime;
     public float pressDistance;
     private Transform plateTransform;
@@ -47,26 +47,20 @@ class PressurePlate : ControlObject {
         }
     }
 
-    public override State GetCurrentState() {
+    public override FloatState GetCurrentState() {
         return new FloatState(plateTransform.localPosition.y);
     }
 
-    public override void UpdateObjectState(State s) {
-        FloatState state = s as FloatState;
+    public override void UpdateObjectState(FloatState state) {
         plateTransform.localPosition = new Vector3(initPos.x, state.f, initPos.z);
     }
 
-    public override float GetStateDifference(State s1, State s2) {
-        FloatState state1 = s1 as FloatState;
-        FloatState state2 = s2 as FloatState;
+    public override float GetStateDifference(FloatState state1, FloatState state2) {
         return Mathf.Abs(state1.f - state2.f);
     }
-}
 
-public class FloatState : State {
-    public float f;
-
-    public FloatState(float num) {
-        f = num;
+    public override FloatState StateLerp(FloatState state1, FloatState state2, float f)
+    {
+        return new FloatState(Mathf.Lerp(state1.f, state2.f, f));
     }
 }

@@ -2,9 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
-public class TimeReversibleRigidbody : TimeReversibleObject {
-    private Stack<Rigidbody2DState> objectTimeHistory;
-    private bool isRigidbody;
+public class TimeReversibleRigidbody : TimeReversibleObject<Rigidbody2DState> {
     protected Rigidbody2D rb2D;
     private bool isKinematic;
     private Vector2 pausedVelocity;
@@ -15,25 +13,19 @@ public class TimeReversibleRigidbody : TimeReversibleObject {
     public float restoringLerp = 10.0f;
 
     public override void ChildStart() {
-        if ((rb2D = GetComponent<Rigidbody2D>()) == null) {
-            isRigidbody = false;
-        }
-        else {
-            isRigidbody = true;
-            isKinematic = rb2D.isKinematic;
-        }
+        rb2D = GetComponent<Rigidbody2D>();
+        
+        isKinematic = rb2D.isKinematic;
 
         TimeEventManager.OnPause += UpdateOnPause;
-        TimeEventManager.OnReverse += UpdateOnReverse;
+        TimeEventManager.OnReverse += UpdateOnReverse;        
     }
     
-    public override State GetCurrentState() {
+    public override Rigidbody2DState GetCurrentState() {
         return new Rigidbody2DState(transform.position, transform.eulerAngles.z, rb2D.velocity, rb2D.angularVelocity);
     }
      
-    public override float GetStateDifference(State s1, State s2) {
-        Rigidbody2DState state1 = s1 as Rigidbody2DState;
-        Rigidbody2DState state2 = s2 as Rigidbody2DState;
+    public override float GetStateDifference(Rigidbody2DState state1, Rigidbody2DState state2) {
         float maxDiff = 
             (state1.position - state2.position).magnitude
             + (state1.velocity - state2.velocity).magnitude
@@ -42,32 +34,23 @@ public class TimeReversibleRigidbody : TimeReversibleObject {
         return maxDiff;
     }
 
-    public override void UpdateObjectState(State s) {
-        Rigidbody2DState state = s as Rigidbody2DState;
-
+    public override void UpdateObjectState(Rigidbody2DState state) {
         if (restoringForce && (Utils.Vector3to2(transform.position) - state.position).magnitude < 2) {
             transform.position = Vector3.Lerp(transform.position, state.position, restoringLerp*Time.fixedDeltaTime);
             transform.eulerAngles = new Vector3(0, 0, Utils.AngleLerp(transform.eulerAngles.z, state.angle, restoringLerp*Time.fixedDeltaTime));
-            if (isRigidbody) {
-                rb2D.velocity = Vector3.Lerp(rb2D.velocity, -state.velocity, restoringLerp*Time.fixedDeltaTime);
-                rb2D.angularVelocity = Mathf.Lerp(rb2D.angularVelocity, -state.angularVelocity, restoringLerp*Time.fixedDeltaTime);
-            }
+            rb2D.velocity = Vector3.Lerp(rb2D.velocity, -state.velocity, restoringLerp*Time.fixedDeltaTime);
+            rb2D.angularVelocity = Mathf.Lerp(rb2D.angularVelocity, -state.angularVelocity, restoringLerp*Time.fixedDeltaTime);
         }
         else {
             transform.position = state.position;
             transform.eulerAngles = new Vector3(0, 0, state.angle);
-            if (isRigidbody) {
-                rb2D.velocity = -state.velocity;
-                rb2D.angularVelocity = -state.angularVelocity;
-            }
+            rb2D.velocity = -state.velocity;
+            rb2D.angularVelocity = -state.angularVelocity;
         }
     }
 
-    public override State StateLerp(State s1, State s2, float f)
+    public override Rigidbody2DState StateLerp(Rigidbody2DState state1, Rigidbody2DState state2, float f)
     {
-        Rigidbody2DState state1 = s1 as Rigidbody2DState;
-        Rigidbody2DState state2 = s2 as Rigidbody2DState;
-        
         Vector2 newPos = Vector2.Lerp(state1.position, state2.position, f);
         float newA = Mathf.LerpAngle(state1.angle, state2.angle, f);
         Vector2 newV = Vector2.Lerp(state1.velocity, state2.velocity, f);
@@ -123,32 +106,11 @@ public class TimeReversibleRigidbody : TimeReversibleObject {
         TimeEventManager.OnReverse -= UpdateOnReverse;
     }
 
-    public override State SlowDownState(State s) {
-        Rigidbody2DState state = s as Rigidbody2DState;
+    public override Rigidbody2DState SlowDownState(Rigidbody2DState state) {
         return new Rigidbody2DState(state.position, state.angle, state.velocity / TimeEventManager.slowFactor, state.angularVelocity / TimeEventManager.slowFactor);
     }
 
-    public override State SpeedUpState(State s) {
-        Rigidbody2DState state = s as Rigidbody2DState;
+    public override Rigidbody2DState SpeedUpState(Rigidbody2DState state) {
         return new Rigidbody2DState(state.position, state.angle, state.velocity * TimeEventManager.slowFactor, state.angularVelocity * TimeEventManager.slowFactor);
-    }
-}
-
-// general object that can be time reversed
-public class Rigidbody2DState : State {
-    public Vector2 position;
-
-    // third Euler angle (the only one we need for 2D)
-    public float angle;
-    public Vector2 velocity;
-    public float angularVelocity;
-
-
-    public Rigidbody2DState (Vector2 pos, float a, Vector2 v, float w) {
-        position = pos;
-        angle = a;
-
-        velocity = v;
-        angularVelocity = w;
     }
 }

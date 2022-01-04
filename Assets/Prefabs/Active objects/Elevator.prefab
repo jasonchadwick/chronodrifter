@@ -80,7 +80,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   similarityThreshold: 0.05
-  maxStackSize: 1
   incomingSignalSum: 0
   activationThreshold: 0
   defaultActiveStatus: 0
@@ -104,7 +103,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &158486052995340897
 Transform:
@@ -187,7 +186,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2586031300681560052
 Transform:
@@ -270,7 +269,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2257963768588909315
 Transform:
@@ -351,7 +350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1130256407429609147, guid: 59ea890125dbe7fbc9dd1e7e3f545ed4, type: 3}
       propertyPath: m_InstanceId
-      value: -278802
+      value: -97620
       objectReference: {fileID: 0}
     - target: {fileID: 1289297675716193585, guid: 59ea890125dbe7fbc9dd1e7e3f545ed4, type: 3}
       propertyPath: m_Name
@@ -421,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1130256407429609147, guid: 59ea890125dbe7fbc9dd1e7e3f545ed4, type: 3}
       propertyPath: m_InstanceId
-      value: -278814
+      value: -97630
       objectReference: {fileID: 0}
     - target: {fileID: 1289297675716193585, guid: 59ea890125dbe7fbc9dd1e7e3f545ed4, type: 3}
       propertyPath: m_Name

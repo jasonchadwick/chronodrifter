@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-class TimeGhost : TimeReversibleObject {
+class TimeGhost : TimeReversibleObject<PositionState> {
     public GameObject ghostPrefab;
     private GameObject ghost;
 
@@ -28,42 +28,29 @@ class TimeGhost : TimeReversibleObject {
         }
     }
 
-    public override State GetCurrentState()
+    public override PositionState GetCurrentState()
     {
         return new PositionState(Utils.Vector3to2(transform.position));
     }
 
-    public override float GetStateDifference(State s1, State s2)
+    public override float GetStateDifference(PositionState state1, PositionState state2)
     {
-        PositionState state1 = s1 as PositionState;
-        PositionState state2 = s2 as PositionState;
         return (state1.position - state2.position).magnitude;
     }
 
-    public override void UpdateObjectState(State s)
+    public override void UpdateObjectState(PositionState state)
     {   
-        PositionState state = s as PositionState;
         if (ghost != null) {
             ghost.transform.position = state.position;
         }
     }
 
-    public override void OnStackSize1(State s)
+    public override void OnStackSize1(PositionState state)
     {
         Destroy(ghost);
     }
 
-    public override State StateLerp(State s1, State s2, float f) {
-        PositionState state1 = s1 as PositionState;
-        PositionState state2 = s2 as PositionState;
+    public override PositionState StateLerp(PositionState state1, PositionState state2, float f) {
         return new PositionState(Vector2.Lerp(state1.position, state2.position, f));
-    }
-}
-
-public class PositionState : State {
-    public Vector2 position;
-
-    public PositionState(Vector2 p) {
-        position = p;
     }
 }
