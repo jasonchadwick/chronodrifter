@@ -315,7 +315,7 @@ MonoBehaviour:
   - {x: -2, y: 8, z: 0}
   m_ShapePathHash: 1133901077
   m_Mesh: {fileID: 0}
-  m_InstanceId: 50018
+  m_InstanceId: 53028
 --- !u!114 &6110307797362161135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -332,8 +332,7 @@ MonoBehaviour:
   incomingSignalSum: 0
   activationThreshold: 1
   defaultActiveStatus: 0
-  moveTime: 0.7
-  moveLerp: 3
+  velocity: 10
   moveDistance: 15
   crushing: 0
   crushOnActive: 0
@@ -386,7 +385,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 1
   m_Color: {r: 0.6745283, g: 1, b: 0.98184526, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 0
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 00000000

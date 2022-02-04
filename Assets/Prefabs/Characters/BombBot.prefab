@@ -67,7 +67,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 6200000, guid: 8b74795fc52aee036a4b5c05492279ea, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -86,7 +86,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rollForce: 10
-  explodeDistance: 5
+  explodeDistance: 3
+  killDistance: 0
+  explodeTime: 0
 --- !u!212 &2462100936828622697
 SpriteRenderer:
   m_ObjectHideFlags: 0

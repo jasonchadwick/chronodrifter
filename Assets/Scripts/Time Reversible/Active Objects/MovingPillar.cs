@@ -6,19 +6,20 @@ using UnityEngine.Experimental.Rendering.Universal;
    its goal position. Could change this in the future.
 */
 
-class MovingPillar : ActivatedObject<PositionState> {
-    public float moveTime;
-    public float moveLerp;
+class MovingPillar : ActivatedObject<PillarState> {
+    public float velocity;
     public float moveDistance;
     public bool crushing;
     public bool crushOnActive;
     public float crushDistance;
+    private Rigidbody2D rb2d;
     private BoxCollider2D crushCollider;
     private Vector3 activePos;
     private Vector3 inactivePos;
     private Light2D activeLight;
 
     public override void ChildStart() {
+        rb2d = GetComponent<Rigidbody2D>();
         inactivePos = transform.position;
         activePos = inactivePos + transform.up * moveDistance;
         activeLight = GetComponentInChildren<Light2D>();
@@ -28,13 +29,6 @@ class MovingPillar : ActivatedObject<PositionState> {
     }
 
     public override void ChildFixedUpdate() {
-        if ((transform.position - inactivePos).magnitude > 1.0f) {
-            activeLight.intensity = 0.5f;
-        }
-        else {
-            activeLight.intensity = 0;
-        }
-
         if (crushing) {
             Vector3 crushPos;
             if (crushOnActive) {
@@ -54,39 +48,54 @@ class MovingPillar : ActivatedObject<PositionState> {
 
         if (!TimeEventManager.isReversed) {
             if (IsActive()) {
-                if ((transform.position - activePos).magnitude > 0.05f) {
-                    transform.position = Vector3.Lerp(transform.position, activePos, moveLerp * Time.fixedDeltaTime / TimeEventManager.curSlowFactor);
+                activeLight.intensity = 0.5f;
+                float normDistance = Vector3.Dot(activePos - transform.position, transform.up) / moveDistance;
+                if (normDistance > 0.01f) {
+                    rb2d.velocity = transform.up * velocity;
                 }
                 else {
+                    rb2d.velocity = Vector2.zero;
                     transform.position = activePos;
                 }
             }
             else {
-                if ((transform.position - inactivePos).magnitude > 0.05f) {
-                    transform.position = Vector3.Lerp(transform.position, inactivePos, moveLerp * Time.fixedDeltaTime / TimeEventManager.curSlowFactor);
+                activeLight.intensity = 0;
+                float normDistance = Vector3.Dot(transform.position - inactivePos, transform.up) / moveDistance;
+                if (normDistance > 0.01f) {
+                    rb2d.velocity = -transform.up * velocity;
                 }
                 else {
+                    rb2d.velocity = Vector2.zero;
                     transform.position = inactivePos;
                 }
+            }
+            if (moveDistance < 0) {
+                rb2d.velocity *= -1;
             }
         }
     }
 
-    public override PositionState GetCurrentState() {
-        return new PositionState(transform.position);
+    public override PillarState GetCurrentState() {
+        return new PillarState(transform.position, rb2d.velocity, activeLight.intensity);
     }
 
-    public override float GetStateDifference(PositionState state1, PositionState state2)
+    public override float GetStateDifference(PillarState state1, PillarState state2)
     {
-        return (state1.position - state2.position).magnitude;
+        return (state1.position - state2.position).magnitude 
+             + (state1.velocity - state2.velocity).magnitude
+             + Mathf.Abs(state1.intensity - state2.intensity);
     }
 
-    public override void UpdateObjectState(PositionState state)
+    public override void UpdateObjectState(PillarState state)
     {
         transform.position = state.position;
+        rb2d.velocity = -state.velocity;
+        activeLight.intensity = state.intensity;
     }
 
-    public override PositionState StateLerp(PositionState state1, PositionState state2, float f) {
-        return new PositionState(Vector3.Lerp(state1.position, state2.position, f));
+    public override PillarState StateLerp(PillarState state1, PillarState state2, float f) {
+        return new PillarState(Vector2.Lerp(state1.position, state2.position, f),
+                               Vector2.Lerp(state1.velocity, state2.velocity, f),
+                               Mathf.Lerp(state1.intensity, state2.intensity, f));
     }
 }

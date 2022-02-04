@@ -43,6 +43,27 @@ public struct PositionState : State {
     }
 }
 
+public struct PillarState : State {
+    public Vector2 position;
+    public Vector2 velocity;
+    public float intensity;
+
+    public PillarState(Vector2 p, Vector2 v, float i) {
+        numIntervals = 1;
+        position = p;
+        velocity = v;
+        intensity = i;
+    }
+
+    public int numIntervals {get; set;}
+    public void Increment() {
+        numIntervals++;
+    }
+    public void Decrement() {
+        numIntervals--;
+    }
+}
+
 // used by TimeReversibleRigidbody
 public struct Rigidbody2DState : State {
     public Vector2 position;

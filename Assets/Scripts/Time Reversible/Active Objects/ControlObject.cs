@@ -16,6 +16,8 @@ class ControlObject<T> : TimeReversibleObject<T> {
 
     public void Activate() {
         if (!isSendingSignal) {
+            // couldn't figure out a way to treat all of them as a generic ActivatedObject.
+            // so this is a workaround: checking each possible type of ActivatedObject.
             foreach (Object tgt in targets) {
                 if (tgt is ActivatedObject<DefaultState>) {
                     (tgt as ActivatedObject<DefaultState>).ApplySignal(signalStrength);
@@ -25,6 +27,9 @@ class ControlObject<T> : TimeReversibleObject<T> {
                 }
                 else if (tgt is ActivatedObject<PositionState>) {
                     (tgt as ActivatedObject<PositionState>).ApplySignal(signalStrength);
+                }
+                else if (tgt is ActivatedObject<PillarState>) {
+                    (tgt as ActivatedObject<PillarState>).ApplySignal(signalStrength);
                 }
                 else {
                     Debug.Log("bad target!");
@@ -45,6 +50,9 @@ class ControlObject<T> : TimeReversibleObject<T> {
                 }
                 else if (tgt is ActivatedObject<PositionState>) {
                     (tgt as ActivatedObject<PositionState>).ApplySignal(-signalStrength);
+                }
+                else if (tgt is ActivatedObject<PillarState>) {
+                    (tgt as ActivatedObject<PillarState>).ApplySignal(-signalStrength);
                 }
                 else {
                     Debug.Log("bad target!");
