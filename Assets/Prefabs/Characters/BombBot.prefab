@@ -86,7 +86,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rollForce: 10
-  explodeDistance: 3
+  explodeDistance: 5
 --- !u!212 &2462100936828622697
 SpriteRenderer:
   m_ObjectHideFlags: 0

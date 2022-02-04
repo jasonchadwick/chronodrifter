@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 /* Rolls towards player once spotted, then explodes.
 */
@@ -10,14 +11,18 @@ class BombBot : Character {
     private Transform eyeTransform;
     private ParticleSystem explosion;
     private bool isExploding;
+    private Light2D eyeLight;
 
     public float rollForce;
     public float explodeDistance;
+    public float killDistance;
+    public float explodeTime;
 
     void Start() {
         rb2D = GetComponent<Rigidbody2D>();
         eyeTransform = transform.GetChild(0);
         explosion = GetComponentInChildren<ParticleSystem>();
+        eyeLight = GetComponentInChildren<Light2D>();
     }
 
     void FixedUpdate() {

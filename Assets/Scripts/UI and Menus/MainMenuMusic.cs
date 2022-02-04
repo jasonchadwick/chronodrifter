@@ -7,6 +7,8 @@ class MainMenuMusic : MonoBehaviour {
     public float volume;
     private bool fadingIn = true;
 
+    private MusicManager levelMusic;
+
     private static MainMenuMusic _instance;
 
     public static MainMenuMusic instance {
@@ -21,6 +23,7 @@ class MainMenuMusic : MonoBehaviour {
     }
 
     void Awake() {
+        // only want one instance alive when we switch scenes.
         if (_instance == null) {
             _instance = this;
             Initialize();
@@ -30,6 +33,11 @@ class MainMenuMusic : MonoBehaviour {
             if (this != _instance) {
                 Destroy(this.gameObject);
             }
+        }
+
+        // destroy level music manager if there is one alive
+        if ((levelMusic = GameObject.FindObjectOfType<MusicManager>()) != null) {
+            Destroy(levelMusic.gameObject);
         }
     }
 

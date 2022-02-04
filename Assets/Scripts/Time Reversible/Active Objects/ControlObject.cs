@@ -30,7 +30,6 @@ class ControlObject<T> : TimeReversibleObject<T> {
                     Debug.Log("bad target!");
                 }
             }
-            OnActivate();
             isSendingSignal = true;
         }
     }
@@ -51,7 +50,6 @@ class ControlObject<T> : TimeReversibleObject<T> {
                     Debug.Log("bad target!");
                 }
             }
-            OnDeactivate();
             isSendingSignal = false;
         }
     }
