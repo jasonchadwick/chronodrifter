@@ -1,16 +1,16 @@
-html { background-color: rgb(8, 8, 8) }
+html { background-color: black }
 
 body { padding: 0; margin: 0 }
-h1 { color: rgb(255,255,255); font-family: Helvetica, sans-serif; font-size:40px; line-height:20px }
-h3 { color: rgb(255,255,255); font-family: Helvetica, sans-serif; line-height:0px }
-b { color: rgb(255,255,255); font-family: Helvetica, sans-serif }
-a { color: #1EAED3; font-family: Helvetica, sans-serif }
+h1 { color: white; font-family: Helvetica, sans-serif; font-size:40px; line-height:20px }
+h3 { color: white; font-family: Helvetica, sans-serif; font-size:20px; line-height:0px }
+a { color: #1EAED3; font-family: Helvetica, sans-serif; font-size:20px; }
 #footer {   
     position:fixed;
-    left:0px;
-    bottom:0px;
-    height:120px;
-    width:100%;
+    left:50%;
+    bottom:10px;
+    width:92.5%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
  } 
 #unity-container { position: absolute }
 #unity-container.unity-desktop { left: 50%; top: 50%; transform: translate(-50%, -50%) }
@@ -21,9 +21,9 @@ a { color: #1EAED3; font-family: Helvetica, sans-serif }
 #unity-logo { width: 154px; height: 130px; background: url('unity-logo-dark.png') no-repeat center }
 #unity-progress-bar-empty { width: 141px; height: 18px; margin-top: 10px; background: url('progress-bar-empty-dark.png') no-repeat center }
 #unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('progress-bar-full-dark.png') no-repeat center }
-#unity-footer { position: relative }
+/* #unity-footer { position: relative }
 .unity-mobile #unity-footer { display: none }
 #unity-webgl-logo { float:left; width: 204px; height: 38px; background: url('webgl-logo.png') no-repeat center }
 #unity-build-title { float: right; margin-right: 10px; line-height: 38px; font-family: arial; font-size: 18px; color: gray }
-#unity-fullscreen-button { float: right; width: 38px; height: 38px; background: url('fullscreen-button.png') no-repeat center }
+#unity-fullscreen-button { float: right; width: 38px; height: 38px; background: url('fullscreen-button.png') no-repeat center } */
 #unity-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: white; padding: 10px; display: none }
