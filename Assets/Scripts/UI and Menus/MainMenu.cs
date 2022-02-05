@@ -11,6 +11,7 @@ class MainMenu : MonoBehaviour {
     public float titleLerp;
     public float titleAcc;
     public float accInterval;
+    public Image startCover;
     private Transform titleTransform;
     private Vector2 titleAcceleration;
     private Vector2 titleAccelGoal;
@@ -27,6 +28,10 @@ class MainMenu : MonoBehaviour {
     }
 
     void FixedUpdate() {
+        if (startCover != null) {
+            Destroy(startCover);
+        }
+
         if (timeSincePush > accInterval) {
             timeSincePush = 0;
             titleAccelGoal = titleAcceleration + titleAcc*Random.insideUnitCircle;

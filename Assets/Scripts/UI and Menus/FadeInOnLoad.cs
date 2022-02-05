@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 class FadeInOnLoad : MonoBehaviour {
     public List<Graphic> targets;
-    private List<(Graphic, Color)> tgtColors;
     public float fadeTime;
+    private List<(Graphic, Color)> tgtColors;
     private Color originalColor;
     private bool doneFading;
 
@@ -14,6 +14,7 @@ class FadeInOnLoad : MonoBehaviour {
         tgtColors = new List<(Graphic, Color)>();
         foreach (Graphic g in targets) {
             tgtColors.Add((g, g.color));
+            g.color = new Color(0,0,0,0);
         }
     }
 

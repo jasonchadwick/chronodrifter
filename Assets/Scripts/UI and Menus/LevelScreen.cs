@@ -13,8 +13,8 @@ class LevelScreen : MonoBehaviour {
     public Button mainMenuButton;
 
     void Start() {
-        // assume there are 2 non-level scenes in the game (main menu and level menu)
-        nlevels = SceneManager.sceneCountInBuildSettings - 2;
+        // assume there are 3 non-level scenes in the game (logo splash, main menu and level menu)
+        nlevels = SceneManager.sceneCountInBuildSettings - Utils.numNonLevelScenes;
         canvas = GetComponent<Canvas>();
         Rect pixelRect = canvas.pixelRect;
 
@@ -59,7 +59,7 @@ class LevelScreen : MonoBehaviour {
     public void LoadLevel(int levelidx) {
         Destroy(FindObjectOfType<MainMenuMusic>().gameObject);
         TimeEventManager.Reset();
-        SceneManager.LoadScene(levelidx + 2);
+        SceneManager.LoadScene(levelidx + Utils.numNonLevelScenes);
     }
 
     public void MainMenu() {

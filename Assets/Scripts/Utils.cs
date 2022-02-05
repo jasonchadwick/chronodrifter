@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 class Utils {
+    // number of scenes that are not levels. Used by level screen.
+    public static int numNonLevelScenes = 3;
+
     public static string[] levelNames = {
             "Your Education Begins",
             "Some Basic Time Travel",
