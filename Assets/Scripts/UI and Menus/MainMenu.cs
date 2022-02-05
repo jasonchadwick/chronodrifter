@@ -11,8 +11,6 @@ class MainMenu : MonoBehaviour {
     public float titleLerp;
     public float titleAcc;
     public float accInterval;
-    public float fadeInTime;
-    public Image fadeInCover;
     private Transform titleTransform;
     private Vector2 titleAcceleration;
     private Vector2 titleAccelGoal;
@@ -29,13 +27,6 @@ class MainMenu : MonoBehaviour {
     }
 
     void FixedUpdate() {
-        if (Time.timeSinceLevelLoad < fadeInTime) {
-            fadeInCover.color = Color.Lerp(Color.black, new Color(0, 0, 0, 0), Time.timeSinceLevelLoad / fadeInTime);
-        }
-        else {
-            fadeInCover.color = new Color(0,0,0,0);
-        }
-        
         if (timeSincePush > accInterval) {
             timeSincePush = 0;
             titleAccelGoal = titleAcceleration + titleAcc*Random.insideUnitCircle;
