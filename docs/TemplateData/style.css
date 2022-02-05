@@ -1,10 +1,10 @@
 html { background-color: rgb(8, 8, 8) }
 
 body { padding: 0; margin: 0 }
-h1 { color: rgb(255,255,255); font-family: Helvetica, sans-serif; font-size:50px; line-height:20px }
+h1 { color: rgb(255,255,255); font-family: Helvetica, sans-serif; font-size:40px; line-height:20px }
 h3 { color: rgb(255,255,255); font-family: Helvetica, sans-serif; line-height:0px }
 b { color: rgb(255,255,255); font-family: Helvetica, sans-serif }
-a { color: rgb(0, 140, 255); font-family: Helvetica, sans-serif }
+a { color: #1EAED3; font-family: Helvetica, sans-serif }
 #footer {   
     position:fixed;
     left:0px;

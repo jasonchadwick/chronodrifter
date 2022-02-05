@@ -24,7 +24,7 @@ class SceneActions : MonoBehaviour {
         Time.timeScale = 0.00001f;
         loadScreen = Instantiate(loadScreenPrefab, Vector3.zero, Quaternion.identity);
         textCanvas = Instantiate(textCanvasPrefab, Vector3.zero, Quaternion.identity);
-        textCanvas.GetComponentInChildren<Text>().text = Utils.formLevelName(SceneManager.GetActiveScene().buildIndex-2, 1, true);
+        textCanvas.GetComponentInChildren<Text>().text = Utils.formLevelName(SceneManager.GetActiveScene().buildIndex-3, 1, true);
     }
 
     void Update() {
