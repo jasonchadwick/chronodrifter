@@ -1,6 +1,6 @@
 # chronodrifter
 
-## https://placeholder-studios-dev.github.io/chronodrifter/
+## https://www.jason-chadwick.com/chronodrifter/
 
 Platform puzzler where the direction of time flow can change.
 
